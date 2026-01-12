@@ -9,6 +9,7 @@ import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 import SuperAdmin from './pages/SuperAdmin';
 import StaffPanel from './pages/StaffPanel';
+import Auth from './pages/Auth';
 import BottomNav from './components/BottomNav';
 
 // Error Boundary pour capturer les erreurs React
@@ -53,6 +54,7 @@ const AppContent = () => {
         <Route path="/jury/favoris" element={<JuryFavoris />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/auth" element={<Auth />} />
         <Route path="/superadmin" element={<SuperAdmin />} />
         <Route path="/staff" element={<StaffPanel />} />
       </Routes>

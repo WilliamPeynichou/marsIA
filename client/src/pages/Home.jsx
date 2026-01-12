@@ -56,7 +56,7 @@ const Home = () => {
             transition={{ delay: 1.2, duration: 1 }}
             className="mt-16 flex flex-col items-center space-y-6"
           >
-            <Link to="/submit">
+            <Link to="/auth?mode=register">
               <button className="btn-primary shadow-lg shadow-cta-gold/20">
                 Soumettre votre film
               </button>
@@ -109,7 +109,7 @@ const Home = () => {
                 Voir les films
               </button>
             </Link>
-            <Link to="/submit">
+            <Link to="/auth?mode=register">
               <button className="btn-primary">
                 Participer
               </button>

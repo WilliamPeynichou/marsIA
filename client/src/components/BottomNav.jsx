@@ -10,8 +10,8 @@ const BottomNav = () => {
   const navItems = [
     { to: '/', icon: Home, label: 'Accueil' },
     { to: '/catalogue', icon: LayoutGrid, label: 'Films' },
-    { to: '/submit', icon: PlusCircle, label: 'Soumettre' },
-    { to: '/jury', icon: Play, label: 'Player' },
+    { to: '/auth?mode=register', icon: PlusCircle, label: 'Soumettre' },
+    { to: '/jury', icon: Play, label: 'Visionner' },
     { to: '/profile', icon: User, label: 'Profil' },
   ];
 

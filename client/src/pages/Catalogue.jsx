@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Filter, ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Mock data
 const mockFilms = Array.from({ length: 48 }, (_, i) => ({
@@ -16,6 +17,7 @@ const mockFilms = Array.from({ length: 48 }, (_, i) => ({
 const FILMS_PER_PAGE = 20;
 
 const Catalogue = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({ category: '', country: '', aiTool: '' });
@@ -109,6 +111,7 @@ const Catalogue = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
             className="group cursor-pointer"
+            onClick={() => navigate('/jury')}
           >
             <div className="aspect-[2/3] rounded-2xl overflow-hidden relative bg-earth-brown/5 mb-3">
               <img 

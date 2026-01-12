@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Film, Clock, Check, X, LogOut, Settings, Globe } from 'lucide-react';
+import { User, Film, Clock, Check, X, LogOut, Settings, Globe, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
   const { i18n } = useTranslation();
@@ -48,6 +49,12 @@ const Profile = () => {
           <p className="text-[10px] uppercase tracking-widest text-earth-brown/50 mt-1">{user.role}</p>
         </div>
         <div className="flex space-x-2">
+          <Link to="/submit">
+            <button className="flex items-center space-x-2 bg-accent-ia text-white px-4 py-2 rounded-xl text-[10px] font-bold uppercase hover:bg-accent-ia/90 transition-all">
+              <Plus size={14} />
+              <span>Nouveau film</span>
+            </button>
+          </Link>
           <button 
             onClick={toggleLanguage}
             className="p-2 rounded-xl bg-earth-brown/5 text-earth-brown/60"

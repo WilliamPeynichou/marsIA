@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSwipeable } from 'react-swipeable';
-import { Star, Bookmark, Trash2, X, MessageSquare, ChevronUp, ChevronDown, BookmarkCheck } from 'lucide-react';
+import { Star, Bookmark, Trash2, X, MessageSquare, ChevronUp, ChevronDown, BookmarkCheck, AlertTriangle, ChevronLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 // Mock films data
 const mockJuryFilms = [
-  { id: 1, title: "Neon Future", director: "Alice Martin", country: "France", aiTools: "Runway, Midjourney", color: "from-blue-400 to-indigo-500" },
-  { id: 2, title: "Digital Dreams", director: "John Smith", country: "USA", aiTools: "Sora, ChatGPT", color: "from-blue-400 to-cyan-500" },
-  { id: 3, title: "Marseille 2050", director: "Marie Dupont", country: "France", aiTools: "Midjourney, Kling", color: "from-green-400 to-emerald-500" },
-  { id: 4, title: "AI Symphony", director: "Kenji Tanaka", country: "Japan", aiTools: "Suno, Runway", color: "from-purple-400 to-violet-500" },
-  { id: 5, title: "Tomorrow's Garden", director: "Elena Rossi", country: "Italy", aiTools: "Stable Diffusion", color: "from-rose-400 to-pink-500" },
+  { id: 1, title: "Neon Future", director: "Alice Martin", country: "France", aiTools: "Runway, Midjourney", color: "from-blue-400 to-indigo-500", url: "https://player.vimeo.com/external/370331493.sd.mp4?s=7b2351d1ee6479994c6a967c11714872&profile_id=139&oauth2_token_id=57447761" },
+  { id: 2, title: "Digital Dreams", director: "John Smith", country: "USA", aiTools: "Sora, ChatGPT", color: "from-blue-400 to-cyan-500", url: "https://player.vimeo.com/external/370331493.sd.mp4?s=7b2351d1ee6479994c6a967c11714872&profile_id=139&oauth2_token_id=57447761" },
+  { id: 3, title: "Marseille 2050", director: "Marie Dupont", country: "France", aiTools: "Midjourney, Kling", color: "from-green-400 to-emerald-500", url: "https://player.vimeo.com/external/370331493.sd.mp4?s=7b2351d1ee6479994c6a967c11714872&profile_id=139&oauth2_token_id=57447761" },
+  { id: 4, title: "AI Symphony", director: "Kenji Tanaka", country: "Japan", aiTools: "Suno, Runway", color: "from-purple-400 to-violet-500", url: "https://player.vimeo.com/external/370331493.sd.mp4?s=7b2351d1ee6479994c6a967c11714872&profile_id=139&oauth2_token_id=57447761" },
+  { id: 5, title: "Tomorrow's Garden", director: "Elena Rossi", country: "Italy", aiTools: "Stable Diffusion", color: "from-rose-400 to-pink-500", url: "https://player.vimeo.com/external/370331493.sd.mp4?s=7b2351d1ee6479994c6a967c11714872&profile_id=139&oauth2_token_id=57447761" },
 ];
 
 const Jury = () => {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const isJury = user.role === 'jury' || user.role === 'admin';
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [showCommentModal, setShowCommentModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
   const [bookmarked, setBookmarked] = useState([]);
   const [dislikedTrash, setDislikedTrash] = useState([]);
   const [showTrash, setShowTrash] = useState(false);
@@ -33,13 +36,18 @@ const Jury = () => {
       setDirection(-1);
       setCurrentIndex(i => i - 1);
     } else if (dir === 'right') {
-      setShowVoteModal(true);
+      if (isJury) setShowVoteModal(true);
+      else toggleBookmark();
     } else if (dir === 'left') {
-      // Dislike - add to trash
-      setDislikedTrash(prev => [...prev.slice(-4), currentFilm]);
-      if (currentIndex < mockJuryFilms.length - 1) {
-        setDirection(1);
-        setCurrentIndex(i => i + 1);
+      if (isJury) {
+        // Dislike - add to trash
+        setDislikedTrash(prev => [...prev.slice(-4), currentFilm]);
+        if (currentIndex < mockJuryFilms.length - 1) {
+          setDirection(1);
+          setCurrentIndex(i => i + 1);
+        }
+      } else {
+        setShowReportModal(true);
       }
     }
   };
@@ -78,6 +86,19 @@ const Jury = () => {
           transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
           className={`absolute inset-0 bg-gradient-to-br ${currentFilm.color} flex flex-col`}
         >
+          {/* Video Player Background Simulation */}
+          <div className="absolute inset-0 z-0">
+            <video 
+              autoPlay 
+              muted 
+              loop 
+              playsInline
+              className="w-full h-full object-cover opacity-60"
+              src={currentFilm.url}
+            />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black/40 z-[1]" />
+
           {/* Film Info Overlay */}
           <div className="absolute inset-x-0 bottom-0 p-6 pb-24 bg-gradient-to-t from-black/60 to-transparent z-10">
             <h1 className="text-3xl font-display font-bold text-white mb-2">{currentFilm.title}</h1>
@@ -86,6 +107,13 @@ const Jury = () => {
           </div>
 
           {/* Navigation Hints */}
+          <div className="absolute left-6 top-8 z-20">
+            <Link to={-1} className="flex items-center space-x-2 text-white/60 hover:text-white transition-colors">
+              <ChevronLeft size={24} />
+              <span className="text-xs font-bold uppercase tracking-widest">Retour</span>
+            </Link>
+          </div>
+
           <div className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col items-center space-y-2 text-white/30 z-10">
             <ChevronUp size={20} />
             <span className="text-[8px] uppercase tracking-widest writing-vertical">Swipe</span>
@@ -117,27 +145,46 @@ const Jury = () => {
             )}
           </button>
         </Link>
-        <button 
-          onClick={() => setShowVoteModal(true)}
-          className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-all"
-        >
-          <Star size={22} />
-        </button>
+
+        {isJury && (
+          <button 
+            onClick={() => setShowVoteModal(true)}
+            className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-all"
+            title="Voter"
+          >
+            <Star size={22} />
+          </button>
+        )}
+
         <button 
           onClick={toggleBookmark}
           className={`w-12 h-12 rounded-full backdrop-blur-sm flex items-center justify-center transition-all ${
             bookmarked.includes(currentFilm.id) ? 'bg-accent-ia text-white' : 'bg-white/20 text-white hover:bg-white/30'
           }`}
+          title="Mettre en signet"
         >
           <Bookmark size={22} fill={bookmarked.includes(currentFilm.id) ? 'currentColor' : 'none'} />
         </button>
+
+        {isJury && (
+          <button 
+            onClick={() => setShowCommentModal(true)}
+            className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-all"
+            title="Commenter"
+          >
+            <MessageSquare size={22} />
+          </button>
+        )}
+
         <button 
-          onClick={() => setShowCommentModal(true)}
-          className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-all"
+          onClick={() => setShowReportModal(true)}
+          className="w-12 h-12 rounded-full bg-red-500/20 backdrop-blur-sm flex items-center justify-center text-red-500 hover:bg-red-500/30 transition-all"
+          title="Signaler"
         >
-          <MessageSquare size={22} />
+          <AlertTriangle size={22} />
         </button>
-        {dislikedTrash.length > 0 && (
+
+        {isJury && dislikedTrash.length > 0 && (
           <button 
             onClick={() => setShowTrash(true)}
             className="w-12 h-12 rounded-full bg-red-500/80 backdrop-blur-sm flex items-center justify-center text-white relative"
@@ -230,6 +277,39 @@ const Jury = () => {
               >
                 Enregistrer
               </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Trash Modal */}
+      <AnimatePresence>
+        {showReportModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/90 backdrop-blur-xl z-50 flex items-center justify-center p-6"
+          >
+            <button onClick={() => setShowReportModal(false)} className="absolute top-6 right-6 text-white/60">
+              <X size={28} />
+            </button>
+            <div className="w-full max-w-sm">
+              <h2 className="text-2xl font-serif italic text-white mb-6 text-center">Signaler ce contenu</h2>
+              <div className="space-y-3 mb-6">
+                {['Contenu inapproprié', 'Droits d\'auteur', 'Qualité technique', 'Autre'].map(reason => (
+                  <button 
+                    key={reason}
+                    className="w-full py-3 px-4 bg-white/5 border border-white/10 rounded-xl text-white text-sm text-left hover:bg-white/10 transition-all"
+                    onClick={() => {
+                      alert('Merci pour votre signalement.');
+                      setShowReportModal(false);
+                    }}
+                  >
+                    {reason}
+                  </button>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
