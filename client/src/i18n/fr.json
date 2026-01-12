@@ -1,0 +1,16 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "submit": "Soumettre",
+    "jury": "Jury",
+    "login": "Connexion"
+  },
+  "hero": {
+    "subtitle": "Co-création La Plateforme x Mobile Film Festival",
+    "title1": "IMAGINEZ DES",
+    "title2": "FUTURS",
+    "title3": "SOUHAITABLES",
+    "description": "Le premier festival international de courts-métrages de 1 minute intégralement générés par Intelligence Artificielle.",
+    "cta": "Participer"
+  }
+}
