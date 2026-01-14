@@ -1,167 +1,236 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Filter, Play, ArrowRight, Calendar, MapPin, Tag } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { Filter, Play, ArrowRight, Calendar, MapPin, Tag, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-// Données enrichies pour correspondre au style Siena
-const mockFilms = Array.from({ length: 12 }, (_, i) => ({
-  id: i + 1,
-  title: [
-    "Neon Future", "Digital Nature", "Savoy", "Moon 12", 
-    "Binary Sunset", "AI Dreams", "Kafka Trial", "Project X"
-  ][i % 8],
-  director: `Réalisateur ${i + 1}`,
-  year: "2026",
-  location: ['Marseille', 'Tel Aviv', 'Tokyo', 'Berlin', 'New York'][Math.floor(Math.random() * 5)],
-  category: ['Fiction', 'Documentary', 'Experimental', 'Animation'][Math.floor(Math.random() * 4)],
-  poster: `https://picsum.photos/seed/${i + 10}/800/1200`,
-  description: "A film based on a poetic vision of the future, exploring the boundaries between human emotion and synthetic intelligence."
-}));
+// Données enrichies avec les images de la maquette
+const baseFilms = [
+  {
+    id: 1,
+    title: "Dune Horizontal",
+    director: "Denis Villeneuve",
+    year: "2026",
+    location: "Arrakis / Marseille",
+    category: "Sci-Fi",
+    poster: "/assets/maquette/horizontaledune.jpg",
+    description: "Une exploration contemplative des paysages désertiques à travers le prisme de l'intelligence artificielle.",
+    duration: "12:45",
+    tools: "Runway Gen-3, Midjourney v6"
+  },
+  {
+    id: 2,
+    title: "Miss Sunshine AI",
+    director: "Jonathan Dayton",
+    year: "2026",
+    location: "Albuquerque / Berlin",
+    category: "Dramédie",
+    poster: "/assets/maquette/littlemisssunshine.jpg",
+    description: "Le voyage émotionnel d'une famille recomposée dans un monde où les souvenirs sont augmentés par l'IA.",
+    duration: "08:20",
+    tools: "Sora, Luma Dream Machine"
+  },
+  {
+    id: 3,
+    title: "The Substance",
+    director: "Coralie Fargeat",
+    year: "2026",
+    location: "Cannes / Tokyo",
+    category: "Horreur / Experimental",
+    poster: "/assets/maquette/subatnce-bandeau.jpg",
+    description: "Une réflexion viscérale sur la beauté et la technologie, où la chair rencontre le code.",
+    duration: "15:10",
+    tools: "Kling AI, Udio"
+  }
+];
+
+// On triple la liste pour permettre le loop infini
+const mockFilms = [...baseFilms, ...baseFilms, ...baseFilms];
+
+const FilmItem = ({ film, index }) => {
+  const navigate = useNavigate();
+  const containerRef = useRef(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  // Inertie et mouvement smooth
+  const y = useTransform(scrollYProgress, [0, 1], [0, 0]); // Base stable
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [1, 1, 1, 1]);
+
+  return (
+    <div 
+      ref={containerRef}
+      className="relative w-full h-screen flex items-center justify-center snap-center"
+    >
+      {/* Main Poster Container (80% Width/Height) */}
+      <motion.div 
+        style={{ scale, opacity }}
+        className="relative w-[85vw] h-[80vh] group overflow-hidden rounded-sm shadow-[0_0_100px_rgba(0,0,0,0.8)]"
+      >
+        <img 
+          src={film.poster} 
+          alt={film.title}
+          className="w-full h-full object-cover transition-all duration-1000 ease-out"
+        />
+
+        {/* Hover Info Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+          {/* Bottom Left Info */}
+          <div className="absolute bottom-10 left-10 text-left max-w-lg pointer-events-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <span className="text-accent-ia text-[10px] font-bold tracking-[0.4em] uppercase mb-2 block">{film.category}</span>
+              <h2 className="text-4xl md:text-6xl font-serif italic text-white mb-4 leading-none">{film.title}</h2>
+              <div className="flex items-center space-x-6 text-[10px] text-white/60 font-bold tracking-widest uppercase">
+                <span>Dir. {film.director}</span>
+                <span className="w-1 h-1 bg-white/30 rounded-full" />
+                <span>{film.duration}</span>
+                <span className="w-1 h-1 bg-white/30 rounded-full" />
+                <span>{film.year}</span>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Bottom Right Discover Button */}
+          <div className="absolute bottom-10 right-10 pointer-events-auto">
+            <button 
+              onClick={() => navigate(`/film/${film.id}`)}
+              className="flex items-center space-x-4 group/btn bg-white/5 backdrop-blur-md border border-white/20 px-8 py-4 rounded-full hover:bg-white hover:text-black transition-all duration-500"
+            >
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Discover Film</span>
+              <ArrowRight size={14} className="group-hover/btn:translate-x-2 transition-transform duration-500" />
+            </button>
+          </div>
+        </div>
+
+        {/* Film Grain Effect Overlay */}
+        <div className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-[0.15] grain-bg" />
+      </motion.div>
+    </div>
+  );
+};
 
 const Catalogue = () => {
   const navigate = useNavigate();
-  const [showFilters, setShowFilters] = useState(false);
+  const scrollRef = useRef(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isScrolling, setIsScrolling] = useState(false);
+  const scrollTimeout = useRef(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  const handleScroll = () => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    // Logique custom cursor
+    setIsScrolling(true);
+    if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    scrollTimeout.current = setTimeout(() => setIsScrolling(false), 150);
+
+    const scrollTop = container.scrollTop;
+    const itemHeight = container.clientHeight;
+    const totalBaseHeight = itemHeight * baseFilms.length;
+
+    if (scrollTop <= 0) {
+      container.style.scrollBehavior = 'auto';
+      container.scrollTop = totalBaseHeight;
+      container.style.scrollBehavior = 'smooth';
+    } else if (scrollTop >= totalBaseHeight * 2) {
+      container.style.scrollBehavior = 'auto';
+      container.scrollTop = totalBaseHeight;
+      container.style.scrollBehavior = 'smooth';
+    }
+  };
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (container) {
+      const itemHeight = container.clientHeight || window.innerHeight;
+      container.scrollTop = itemHeight * baseFilms.length;
+    }
+  }, []);
 
   return (
-    <div className="min-h-screen bg-background pb-32">
-      {/* Header Minimaliste Style Siena */}
-      <header className="px-6 py-16 md:px-12 flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/5 mb-24">
-        <div>
-          <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-accent-ia mb-4 block">Selected Works</span>
-          <h1 className="text-6xl md:text-8xl font-display font-bold tracking-tighter leading-none">FILMS<span className="text-accent-ia">.</span></h1>
-        </div>
-        <div className="flex flex-col items-start md:items-end mt-8 md:mt-0">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-neutral-grey font-bold mb-6">{mockFilms.length} ARCHIVES DISPONIBLES</p>
-          <button 
-            onClick={() => setShowFilters(!showFilters)}
-            className="group flex items-center space-x-3 text-[10px] font-bold uppercase tracking-widest border border-white/10 px-6 py-3 rounded-full hover:bg-white hover:text-background transition-all duration-500 shadow-xl"
+    <div className="min-h-screen bg-black text-white overflow-x-hidden cursor-none">
+      {/* Custom Scroll Cursor */}
+      <AnimatePresence>
+        {!isScrolling && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0 }}
+            className="fixed z-[999] pointer-events-none flex flex-col items-center justify-center w-20 h-20 rounded-full border border-white/30 bg-white/5 backdrop-blur-sm"
+            style={{ 
+              left: mousePos.x - 40, 
+              top: mousePos.y - 40,
+            }}
           >
-            <Filter size={12} className="group-hover:rotate-180 transition-transform duration-500" />
-            <span>Filtres</span>
-          </button>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white">Scroll</span>
+            <ChevronDown size={14} className="text-white mt-1 animate-bounce" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* CSS For Grain Effect */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .grain-bg {
+          background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+          filter: contrast(150%) brightness(100%);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}} />
+
+      {/* Header Style Pelicule */}
+      <header className="fixed top-0 left-0 right-0 z-50 p-10 flex justify-between items-start pointer-events-none">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="pointer-events-auto"
+        >
+          <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-accent-ia mb-2 block">MARS IA ARCHIVES</span>
+          <h1 className="text-4xl font-display font-bold tracking-tighter">FILM REEL<span className="text-accent-ia">.</span></h1>
+        </motion.div>
+        
+        <div className="pointer-events-auto flex flex-col items-end">
+          <div className="w-12 h-[1px] bg-white/20" />
         </div>
       </header>
 
-      {/* Liste Verticale Immersive */}
-      <div className="space-y-32 md:space-y-64 px-6 md:px-12">
-        {mockFilms.map((film, index) => (
-          <motion.div
-            key={film.id}
-            initial={{ opacity: 0, y: 80 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-150px" }}
-            transition={{ duration: 1, ease: [0.19, 1, 0.22, 1] }}
-            className="group relative grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center"
-          >
-            {/* Info Section (Left) */}
-            <div className="lg:col-span-5 order-2 lg:order-1 space-y-10">
-              <div className="space-y-6">
-                <div className="flex items-center space-x-4">
-                  <span className="w-8 h-[1px] bg-accent-ia" />
-                  <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-accent-ia">
-                    {film.category}
-                  </span>
-                </div>
-                
-                <h2 className="text-5xl md:text-7xl font-serif italic text-foreground leading-[0.9] tracking-tight">
-                  {film.title}
-                </h2>
-                
-                <p className="text-neutral-grey text-base md:text-lg leading-relaxed max-w-md font-serif italic opacity-80">
-                  Directed by <span className="text-foreground font-bold not-italic">{film.director}</span>. {film.description}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-12 py-10 border-y border-white/5">
-                <div className="space-y-2">
-                  <p className="text-[9px] uppercase tracking-[0.3em] text-neutral-grey font-bold flex items-center">
-                    <Calendar size={12} className="mr-2 opacity-50" /> Année
-                  </p>
-                  <p className="text-lg font-display font-bold tracking-tight">{film.year}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-[9px] uppercase tracking-[0.3em] text-neutral-grey font-bold flex items-center">
-                    <MapPin size={12} className="mr-2 opacity-50" /> Lieu
-                  </p>
-                  <p className="text-lg font-display font-bold tracking-tight">{film.location}</p>
-                </div>
-              </div>
-
-              <button 
-                onClick={() => navigate('/jury')}
-                className="flex items-center space-x-6 group/btn"
-              >
-                <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center group-hover/btn:bg-foreground group-hover/btn:border-foreground transition-all duration-700 shadow-2xl relative overflow-hidden">
-                  <Play size={20} className="text-foreground group-hover/btn:text-background relative z-10" />
-                  <motion.div 
-                    initial={false}
-                    whileHover={{ scale: 1.5 }}
-                    className="absolute inset-0 bg-white opacity-0 group-hover/btn:opacity-10 transition-opacity"
-                  />
-                </div>
-                <div className="flex flex-col items-start">
-                  <span className="text-[10px] uppercase tracking-[0.5em] font-bold group-hover/btn:translate-x-3 transition-all duration-700">
-                    EXPLORE
-                  </span>
-                  <span className="text-[8px] text-neutral-grey uppercase tracking-widest mt-1 opacity-0 group-hover/btn:opacity-100 transition-all duration-700">Visionner le film</span>
-                </div>
-              </button>
-            </div>
-
-            {/* Poster Section (Right) */}
-            <div 
-              className="lg:col-span-7 order-1 lg:order-2 relative aspect-[16/10] lg:aspect-[16/11] overflow-hidden rounded-[3rem] cursor-pointer shadow-2xl group/poster" 
-              onClick={() => navigate('/jury')}
-            >
-              <motion.img 
-                whileHover={{ scale: 1.08 }}
-                transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
-                src={film.poster} 
-                alt={film.title}
-                className="w-full h-full object-cover grayscale-[40%] group-hover/poster:grayscale-0 transition-all duration-1000"
-              />
-              
-              {/* Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-background/40 via-transparent to-transparent opacity-60 group-hover/poster:opacity-20 transition-all duration-1000" />
-              
-              {/* Badge "Admit One" style Siena */}
-              <motion.div 
-                animate={{ rotate: [12, 8, 12] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-10 right-10 w-24 h-24 rounded-full border border-white/20 backdrop-blur-xl flex items-center justify-center text-[10px] font-bold text-white uppercase tracking-tighter text-center leading-none shadow-2xl z-20"
-              >
-                <div className="flex flex-col items-center">
-                  <span className="opacity-40 mb-1 tracking-[0.2em]">Ticket</span>
-                  <span>Admit</span>
-                  <span>One</span>
-                  <span className="mt-1 font-display opacity-60 text-[8px]">№ {film.id.toString().padStart(3, '0')}</span>
-                </div>
-              </motion.div>
-
-              {/* Hover state content */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/poster:opacity-100 transition-all duration-700 bg-foreground/5 backdrop-blur-[2px]">
-                <div className="w-24 h-24 rounded-full border border-white/40 flex items-center justify-center">
-                  <Play size={32} className="text-white fill-white" />
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Footer / End Scroll Style */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className="mt-64 text-center px-6"
+      {/* Film Strip Container */}
+      <main 
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="relative z-10 h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth hide-scrollbar"
       >
-        <div className="w-[1px] h-32 bg-gradient-to-b from-accent-ia via-accent-ia/20 to-transparent mx-auto mb-12" />
-        <div className="space-y-4">
-          <p className="text-[10px] uppercase tracking-[0.6em] font-bold text-accent-ia">FIN DE LA SÉLECTION</p>
-          <h3 className="text-3xl font-serif italic text-foreground opacity-40">Plus de chefs-d'œuvre à venir.</h3>
-        </div>
-      </motion.div>
+        {mockFilms.map((film, index) => (
+          <FilmItem key={`${film.id}-${index}`} film={film} index={index} />
+        ))}
+      </main>
+
+      {/* Vertical Indicator */}
+      <div className="fixed right-10 top-1/2 -translate-y-1/2 flex flex-col items-center space-y-4 text-white/10 z-20">
+        <div className="w-[1px] h-32 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+      </div>
     </div>
   );
 };

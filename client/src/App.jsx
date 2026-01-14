@@ -16,6 +16,7 @@ import JuryTeam from './pages/JuryTeam';
 import Winners from './pages/Winners';
 import OffCompetition from './pages/OffCompetition';
 import Chatbot from './pages/Chatbot';
+import FilmDetail from './pages/FilmDetail';
 import BottomNav from './components/BottomNav';
 import { useTranslation } from 'react-i18next';
 import { Globe, User } from 'lucide-react';
@@ -95,6 +96,7 @@ const AppContent = () => {
         <Route path="/winners" element={<Winners />} />
         <Route path="/off-competition" element={<OffCompetition />} />
         <Route path="/chatbot" element={<Chatbot />} />
+        <Route path="/film/:id" element={<FilmDetail />} />
         <Route path="/superadmin" element={<SuperAdmin />} />
         <Route path="/staff" element={<StaffPanel />} />
       </Routes>

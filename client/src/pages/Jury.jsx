@@ -22,7 +22,10 @@ const Jury = () => {
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showMessageModal, setShowMessageModal] = useState(false);
-  const [bookmarked, setBookmarked] = useState([]);
+  const [bookmarked, setBookmarked] = useState(() => {
+    const saved = JSON.parse(localStorage.getItem('marsIA_bookmarks') || '[]');
+    return saved.map(b => b.id);
+  });
   const [dislikedTrash, setDislikedTrash] = useState([]);
   const [showTrash, setShowTrash] = useState(false);
   const [selectedRating, setSelectedRating] = useState(5);
@@ -40,7 +43,6 @@ const Jury = () => {
       setCurrentIndex(i => i - 1);
     } else if (dir === 'right') {
       if (isJury) setShowVoteModal(true);
-      else toggleBookmark();
     } else if (dir === 'left') {
       if (isJury) {
         // Dislike - add to trash
@@ -65,10 +67,51 @@ const Jury = () => {
   });
 
   const toggleBookmark = () => {
+    let newBookmarked;
     if (bookmarked.includes(currentFilm.id)) {
-      setBookmarked(prev => prev.filter(id => id !== currentFilm.id));
+      newBookmarked = bookmarked.filter(id => id !== currentFilm.id);
     } else {
-      setBookmarked(prev => [...prev, currentFilm.id]);
+      newBookmarked = [...bookmarked, currentFilm.id];
+    }
+    setBookmarked(newBookmarked);
+    
+    // Persist to localStorage
+    const savedBookmarks = JSON.parse(localStorage.getItem('marsIA_bookmarks') || '[]');
+    if (newBookmarked.includes(currentFilm.id)) {
+      if (!savedBookmarks.find(b => b.id === currentFilm.id)) {
+        localStorage.setItem('marsIA_bookmarks', JSON.stringify([...savedBookmarks, currentFilm]));
+      }
+    } else {
+      localStorage.setItem('marsIA_bookmarks', JSON.stringify(savedBookmarks.filter(b => b.id !== currentFilm.id)));
+    }
+  };
+
+  const handleSaveRating = () => {
+    const comment = document.getElementById('jury-comment')?.value || '';
+    const ratingEntry = {
+      ...currentFilm,
+      ratings,
+      decision,
+      comment,
+      date: new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
+    };
+
+    const savedRatings = JSON.parse(localStorage.getItem('marsIA_ratings') || '[]');
+    const existingIndex = savedRatings.findIndex(r => r.id === currentFilm.id);
+    
+    if (existingIndex > -1) {
+      savedRatings[existingIndex] = ratingEntry;
+    } else {
+      savedRatings.push(ratingEntry);
+    }
+
+    localStorage.setItem('marsIA_ratings', JSON.stringify(savedRatings));
+    alert('Note et commentaire enregistrés !');
+    setShowVoteModal(false);
+    
+    if (currentIndex < mockJuryFilms.length - 1) {
+      setDirection(1);
+      setCurrentIndex(i => i + 1);
     }
   };
 
@@ -135,19 +178,21 @@ const Jury = () => {
 
       {/* Right Side Actions */}
       <div className="absolute right-4 bottom-32 flex flex-col space-y-6 z-20">
-        <Link to="/jury/favoris">
-          <button 
-            className="w-12 h-12 rounded-full bg-cta-gold/80 backdrop-blur-sm flex items-center justify-center text-white hover:bg-cta-gold transition-all relative shadow-lg"
-            title="Voir mes favoris"
-          >
-            <BookmarkCheck size={22} />
-            {bookmarked.length > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-white text-cta-gold rounded-full text-[10px] font-bold flex items-center justify-center">
-                {bookmarked.length}
-              </span>
-            )}
-          </button>
-        </Link>
+        {isJury && (
+          <Link to="/jury/favoris">
+            <button 
+              className="w-12 h-12 rounded-full bg-cta-gold/80 backdrop-blur-sm flex items-center justify-center text-white hover:bg-cta-gold transition-all relative shadow-lg"
+              title="Voir mes favoris"
+            >
+              <BookmarkCheck size={22} />
+              {bookmarked.length > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-white text-cta-gold rounded-full text-[10px] font-bold flex items-center justify-center">
+                  {bookmarked.length}
+                </span>
+              )}
+            </button>
+          </Link>
+        )}
 
         {isJury && (
           <button 
@@ -159,15 +204,17 @@ const Jury = () => {
           </button>
         )}
 
-        <button 
-          onClick={toggleBookmark}
-          className={`w-12 h-12 rounded-full backdrop-blur-sm flex items-center justify-center transition-all ${
-            bookmarked.includes(currentFilm.id) ? 'bg-accent-ia text-white' : 'bg-white/20 text-white hover:bg-white/30'
-          }`}
-          title="Mettre en signet"
-        >
-          <Bookmark size={22} fill={bookmarked.includes(currentFilm.id) ? 'currentColor' : 'none'} />
-        </button>
+        {isJury && (
+          <button 
+            onClick={toggleBookmark}
+            className={`w-12 h-12 rounded-full backdrop-blur-sm flex items-center justify-center transition-all ${
+              bookmarked.includes(currentFilm.id) ? 'bg-accent-ia text-white' : 'bg-white/20 text-white hover:bg-white/30'
+            }`}
+            title="Mettre en signet"
+          >
+            <Bookmark size={22} fill={bookmarked.includes(currentFilm.id) ? 'currentColor' : 'none'} />
+          </button>
+        )}
 
         {isJury && (
           <button 
@@ -287,19 +334,14 @@ const Jury = () => {
 
               <div className="space-y-4">
                 <textarea 
+                  id="jury-comment"
                   placeholder="Notes internes et commentaires privés..."
                   rows={3}
                   className="w-full bg-white/10 border border-white/10 rounded-2xl px-4 py-3 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-white/30 resize-none"
                 />
                 
                 <button 
-                  onClick={() => {
-                    setShowVoteModal(false);
-                    if (currentIndex < mockJuryFilms.length - 1) {
-                      setDirection(1);
-                      setCurrentIndex(i => i + 1);
-                    }
-                  }}
+                  onClick={handleSaveRating}
                   className="w-full bg-accent-ia text-white py-4 rounded-2xl font-bold text-sm uppercase tracking-widest"
                 >
                   Valider la note
