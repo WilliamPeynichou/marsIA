@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { MapPin, Navigation, Calendar } from 'lucide-react';
 import Countdown from '../components/Countdown';
 
 const Home = () => {
@@ -39,6 +40,16 @@ const Home = () => {
             <div className="flex justify-center">
               <Countdown targetDate="2026-03-13T00:00:00Z" />
             </div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="text-center mt-4"
+            >
+              <span className="text-xl md:text-2xl font-serif italic text-foreground tracking-widest uppercase">
+                13 — 15 Mars 2026
+              </span>
+            </motion.div>
           </div>
 
           <div className="text-center space-y-4">
@@ -95,6 +106,60 @@ const Home = () => {
         </div>
       </section>
 
+      {/* 3 Phases Section */}
+      <section className="py-24 px-6 bg-white/5 border-y border-white/5">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <motion.span 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 0.6 }}
+              className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent-ia"
+            >
+              Calendrier du Festival
+            </motion.span>
+            <h2 className="text-4xl font-display font-bold text-foreground mt-2">Les 3 Temps Forts</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {[
+              { 
+                phase: "Phase 1", 
+                title: "BA & Teasing", 
+                desc: "Découverte des archives et bandes-annonces des éditions précédentes.", 
+                active: true 
+              },
+              { 
+                phase: "Phase 2", 
+                title: "Sélection Officielle", 
+                desc: "Révélation des films en compétition et ouverture des votes du public.", 
+                active: false 
+              },
+              { 
+                phase: "Phase 3", 
+                title: "Le Palmarès", 
+                desc: "Cérémonie de clôture et mise en avant des œuvres lauréates.", 
+                active: false 
+              }
+            ].map((p, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className={`relative p-8 rounded-[2.5rem] border ${p.active ? 'border-accent-ia bg-accent-ia/5' : 'border-white/10 bg-white/5 opacity-50'}`}
+              >
+                {p.active && (
+                  <span className="absolute -top-3 left-8 px-4 py-1 bg-accent-ia text-white text-[8px] font-bold uppercase tracking-widest rounded-full">En cours</span>
+                )}
+                <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-grey mb-4 block">{p.phase}</span>
+                <h3 className="text-xl font-display font-bold text-foreground mb-4">{p.title}</h3>
+                <p className="text-sm text-neutral-grey leading-relaxed">{p.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* About Section */}
       <section className="py-20 px-6">
         <div className="max-w-2xl mx-auto text-center space-y-6">
@@ -115,6 +180,60 @@ const Home = () => {
               </button>
             </Link>
           </div>
+          
+          <div className="flex justify-center space-x-8 pt-12 border-t border-white/5">
+            <Link to="/prizes" className="group">
+              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-neutral-grey group-hover:text-cta-gold transition-colors">Découvrir les Prix</p>
+            </Link>
+            <Link to="/jury-team" className="group">
+              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-neutral-grey group-hover:text-accent-ia transition-colors">Le Jury</p>
+            </Link>
+            <Link to="/winners" className="group">
+              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-neutral-grey group-hover:text-marseille-green transition-colors">Palmarès</p>
+            </Link>
+          </div>
+        </div>
+      </section>
+      
+      {/* Venue Section */}
+      <section className="py-20 px-6 bg-accent-ia/5 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-accent-ia/10 rounded-full blur-[100px] -mr-32 -mt-32" />
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
+          <div className="space-y-6 text-center md:text-left">
+            <motion.span 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 0.6 }}
+              className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent-ia"
+            >
+              Rendez-vous à Marseille
+            </motion.span>
+            <h2 className="text-4xl font-display font-bold text-foreground mt-2">Lieu de l'événement</h2>
+            <div className="flex items-center justify-center md:justify-start space-x-3 text-neutral-grey">
+              <MapPin className="text-accent-ia" size={20} />
+              <p className="text-lg">155 rue Peyssonnel, 13002 Marseille</p>
+            </div>
+            <div className="flex items-center justify-center md:justify-start space-x-3 text-neutral-grey mt-2">
+              <Calendar className="text-cta-gold" size={20} />
+              <p className="text-lg font-bold">13 - 15 Mars 2026</p>
+            </div>
+            <div className="pt-4">
+              <Link to="/venue">
+                <button className="btn-primary group">
+                  <span className="flex items-center">
+                    Infos sur le lieu
+                    <Navigation className="ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" size={16} />
+                  </span>
+                </button>
+              </Link>
+            </div>
+          </div>
+          <div className="w-full md:w-1/2 aspect-video rounded-[2.5rem] overflow-hidden glass border border-white/10 p-2">
+            <img 
+              src="https://images.unsplash.com/photo-1503917988258-f87a78e3c995?q=80&w=1000&auto=format&fit=crop" 
+              alt="Marseille Port" 
+              className="w-full h-full object-cover rounded-[2rem] opacity-80"
+            />
+          </div>
         </div>
       </section>
 
@@ -134,10 +253,10 @@ const Home = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { name: "La Plateforme", type: "Co-Organisateur", logo: "LP" },
-              { name: "Mobile Film Festival", type: "Partenaire Officiel", logo: "MFF" },
-              { name: "Ville de Marseille", type: "Sponsor Institutionnel", logo: "MARS" },
-              { name: "AI Creative Lab", type: "Partenaire Technique", logo: "AIC" },
+              { name: "La Plateforme", type: "Grand Prix marsIA", logo: "LP" },
+              { name: "Mobile Film Festival", type: "Prix Court-Métrage", logo: "MFF" },
+              { name: "Ville de Marseille", type: "Prix du Public", logo: "MARS" },
+              { name: "AI Creative Lab", type: "Prix de l'Innovation", logo: "AIC" },
               { name: "CinéDigital", type: "Sponsor Gold", logo: "CD" },
               { name: "Future Vision", type: "Sponsor Silver", logo: "FV" },
               { name: "TechNext", type: "Partenaire Média", logo: "TN" },

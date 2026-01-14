@@ -20,12 +20,14 @@ const Catalogue = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState({ category: '', country: '', aiTool: '' });
+  const [filters, setFilters] = useState({ category: '', country: '', aiTool: '', prize: '', type: '' });
 
   const filteredFilms = mockFilms.filter(film => {
     if (filters.category && film.category !== filters.category) return false;
     if (filters.country && film.country !== filters.country) return false;
     if (filters.aiTool && film.aiTools !== filters.aiTool) return false;
+    // Simuler d'autres filtres
+    if (filters.type && (filters.type === 'solo' ? index % 2 !== 0 : index % 2 === 0)) return false; 
     return true;
   });
 
@@ -57,11 +59,11 @@ const Catalogue = () => {
           exit={{ opacity: 0, height: 0 }}
           className="mb-6 p-4 bg-white/60 rounded-2xl space-y-4"
         >
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             <select 
               value={filters.category}
               onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-              className="input-field text-xs py-2"
+              className="input-field text-[10px] py-2"
             >
               <option value="">Catégorie</option>
               <option value="Fiction">Fiction</option>
@@ -72,7 +74,7 @@ const Catalogue = () => {
             <select 
               value={filters.country}
               onChange={(e) => setFilters({ ...filters, country: e.target.value })}
-              className="input-field text-xs py-2"
+              className="input-field text-[10px] py-2"
             >
               <option value="">Pays</option>
               <option value="France">France</option>
@@ -84,7 +86,7 @@ const Catalogue = () => {
             <select 
               value={filters.aiTool}
               onChange={(e) => setFilters({ ...filters, aiTool: e.target.value })}
-              className="input-field text-xs py-2"
+              className="input-field text-[10px] py-2"
             >
               <option value="">Outils IA</option>
               <option value="Midjourney">Midjourney</option>
@@ -92,9 +94,28 @@ const Catalogue = () => {
               <option value="Sora">Sora</option>
               <option value="ChatGPT">ChatGPT</option>
             </select>
+            <select 
+              value={filters.prize}
+              onChange={(e) => setFilters({ ...filters, prize: e.target.value })}
+              className="input-field text-[10px] py-2"
+            >
+              <option value="">Prix visé</option>
+              <option value="grand-prix">Grand Prix</option>
+              <option value="innovation">Prix Innovation</option>
+              <option value="narratif">Prix Narratif</option>
+            </select>
+            <select 
+              value={filters.type}
+              onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+              className="input-field text-[10px] py-2"
+            >
+              <option value="">Participation</option>
+              <option value="solo">Solo</option>
+              <option value="group">Groupe</option>
+            </select>
           </div>
           <button 
-            onClick={() => setFilters({ category: '', country: '', aiTool: '' })}
+            onClick={() => setFilters({ category: '', country: '', aiTool: '', prize: '', type: '' })}
             className="text-[10px] uppercase tracking-widest text-accent-ia font-bold"
           >
             Réinitialiser

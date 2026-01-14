@@ -21,10 +21,13 @@ const Jury = () => {
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
+  const [showMessageModal, setShowMessageModal] = useState(false);
   const [bookmarked, setBookmarked] = useState([]);
   const [dislikedTrash, setDislikedTrash] = useState([]);
   const [showTrash, setShowTrash] = useState(false);
   const [selectedRating, setSelectedRating] = useState(5);
+  const [ratings, setRatings] = useState({ artistic: 5, narrative: 5 });
+  const [decision, setDecision] = useState(null);
 
   const currentFilm = mockJuryFilms[currentIndex];
 
@@ -168,9 +171,9 @@ const Jury = () => {
 
         {isJury && (
           <button 
-            onClick={() => setShowCommentModal(true)}
-            className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-all"
-            title="Commenter"
+            onClick={() => setShowMessageModal(true)}
+            className="w-12 h-12 rounded-full bg-blue-500/20 backdrop-blur-sm flex items-center justify-center text-blue-400 hover:bg-blue-500/30 transition-all"
+            title="Contacter le réalisateur"
           >
             <MessageSquare size={22} />
           </button>
@@ -221,32 +224,87 @@ const Jury = () => {
             </button>
             <div className="text-center w-full max-w-sm">
               <h2 className="text-2xl font-serif italic text-white mb-8">Noter ce film</h2>
-              <div className="flex justify-between mb-8">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
-                  <button 
-                    key={n}
-                    onClick={() => setSelectedRating(n)}
-                    className={`text-2xl font-display transition-all ${
-                      selectedRating >= n ? 'text-accent-ia scale-110' : 'text-white/30 hover:text-white/60'
-                    }`}
-                  >
-                    {n}
-                  </button>
-                ))}
+              
+              <div className="space-y-8 mb-8">
+                <div>
+                  <label className="text-[10px] uppercase tracking-widest text-white/50 font-bold block mb-4">Critère Artistique</label>
+                  <div className="flex justify-between">
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
+                      <button 
+                        key={n}
+                        onClick={() => setRatings({ ...ratings, artistic: n })}
+                        className={`text-xl font-display transition-all ${
+                          ratings.artistic >= n ? 'text-accent-ia scale-110' : 'text-white/30 hover:text-white/60'
+                        }`}
+                      >
+                        {n}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-[10px] uppercase tracking-widest text-white/50 font-bold block mb-4">Critère Narratif</label>
+                  <div className="flex justify-between">
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
+                      <button 
+                        key={n}
+                        onClick={() => setRatings({ ...ratings, narrative: n })}
+                        className={`text-xl font-display transition-all ${
+                          ratings.narrative >= n ? 'text-cta-gold scale-110' : 'text-white/30 hover:text-white/60'
+                        }`}
+                      >
+                        {n}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  <label className="text-[10px] uppercase tracking-widest text-white/50 font-bold block mb-4">Décision</label>
+                  <div className="flex space-x-2">
+                    <button 
+                      onClick={() => setDecision('non')}
+                      className={`flex-1 py-3 rounded-xl text-[10px] uppercase font-bold transition-all ${decision === 'non' ? 'bg-red-500 text-white' : 'bg-white/5 text-red-500 border border-red-500/20'}`}
+                    >
+                      Non
+                    </button>
+                    <button 
+                      onClick={() => setDecision('discuter')}
+                      className={`flex-1 py-3 rounded-xl text-[10px] uppercase font-bold transition-all ${decision === 'discuter' ? 'bg-cta-gold text-white' : 'bg-white/5 text-cta-gold border border-cta-gold/20'}`}
+                    >
+                      À discuter
+                    </button>
+                    <button 
+                      onClick={() => setDecision('oui')}
+                      className={`flex-1 py-3 rounded-xl text-[10px] uppercase font-bold transition-all ${decision === 'oui' ? 'bg-marseille-green text-white' : 'bg-white/5 text-marseille-green border border-marseille-green/20'}`}
+                    >
+                      Oui
+                    </button>
+                  </div>
+                </div>
               </div>
-              <p className="text-white/50 text-sm mb-8">Note sélectionnée: <span className="text-accent-ia font-bold">{selectedRating}/10</span></p>
-              <button 
-                onClick={() => {
-                  setShowVoteModal(false);
-                  if (currentIndex < mockJuryFilms.length - 1) {
-                    setDirection(1);
-                    setCurrentIndex(i => i + 1);
-                  }
-                }}
-                className="w-full bg-accent-ia text-white py-4 rounded-2xl font-bold text-sm uppercase tracking-widest"
-              >
-                Valider
-              </button>
+
+              <div className="space-y-4">
+                <textarea 
+                  placeholder="Notes internes et commentaires privés..."
+                  rows={3}
+                  className="w-full bg-white/10 border border-white/10 rounded-2xl px-4 py-3 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-white/30 resize-none"
+                />
+                
+                <button 
+                  onClick={() => {
+                    setShowVoteModal(false);
+                    if (currentIndex < mockJuryFilms.length - 1) {
+                      setDirection(1);
+                      setCurrentIndex(i => i + 1);
+                    }
+                  }}
+                  className="w-full bg-accent-ia text-white py-4 rounded-2xl font-bold text-sm uppercase tracking-widest"
+                >
+                  Valider la note
+                </button>
+              </div>
             </div>
           </motion.div>
         )}
@@ -276,6 +334,40 @@ const Jury = () => {
                 className="w-full mt-4 bg-nature-green text-white py-4 rounded-2xl font-bold text-sm uppercase tracking-widest"
               >
                 Enregistrer
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Message Modal */}
+      <AnimatePresence>
+        {showMessageModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/90 backdrop-blur-xl z-50 flex items-center justify-center p-6"
+          >
+            <button onClick={() => setShowMessageModal(false)} className="absolute top-6 right-6 text-white/60">
+              <X size={28} />
+            </button>
+            <div className="w-full max-w-sm">
+              <h2 className="text-2xl font-serif italic text-white mb-6 text-center">Message au réalisateur</h2>
+              <p className="text-white/50 text-xs mb-4 text-center">Utilisez cet espace pour signaler un problème technique ou demander une correction sur la vidéo.</p>
+              <textarea 
+                placeholder="Votre message..."
+                rows={5}
+                className="w-full bg-white/10 border border-white/10 rounded-2xl px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-white/30 resize-none mb-4"
+              />
+              <button 
+                onClick={() => {
+                  alert('Message envoyé au réalisateur');
+                  setShowMessageModal(false);
+                }}
+                className="w-full bg-blue-500 text-white py-4 rounded-2xl font-bold text-sm uppercase tracking-widest"
+              >
+                Envoyer
               </button>
             </div>
           </motion.div>

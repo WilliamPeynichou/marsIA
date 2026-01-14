@@ -1,18 +1,25 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, LayoutGrid, PlusCircle, Play, User } from 'lucide-react';
+import { Home, LayoutGrid, PlusCircle, Play, User, Globe, Trophy, MessageSquare } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const BottomNav = () => {
   const location = useLocation();
+  const { i18n } = useTranslation();
+
+  const toggleLanguage = () => {
+    const nextLang = i18n.language === 'fr' ? 'en' : 'fr';
+    i18n.changeLanguage(nextLang);
+  };
   
   if (location.pathname === '/jury') return null;
 
   const navItems = [
     { to: '/', icon: Home, label: 'Accueil' },
     { to: '/catalogue', icon: LayoutGrid, label: 'Films' },
+    { to: '/chatbot', icon: MessageSquare, label: 'Assistant' },
     { to: '/auth?mode=register', icon: PlusCircle, label: 'Soumettre' },
     { to: '/jury', icon: Play, label: 'Visionner' },
-    { to: '/profile', icon: User, label: 'Profil' },
   ];
 
   return (
@@ -39,6 +46,15 @@ const BottomNav = () => {
           )}
         </NavLink>
       ))}
+      <button
+        onClick={toggleLanguage}
+        className="flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-3 py-2 px-3 md:px-5 rounded-xl md:rounded-full text-neutral-grey hover:text-foreground hover:bg-white/5 transition-all duration-300"
+      >
+        <Globe size={20} strokeWidth={1.5} />
+        <span className="text-[8px] md:text-[10px] uppercase tracking-wider font-bold">
+          {i18n.language === 'fr' ? 'EN' : 'FR'}
+        </span>
+      </button>
     </div>
   );
 };

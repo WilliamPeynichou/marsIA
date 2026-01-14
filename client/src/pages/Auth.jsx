@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { User, Mail, Lock, ArrowRight, Github } from 'lucide-react';
+import { User, Mail, Lock, ArrowRight, Chrome } from 'lucide-react';
 
 const Auth = () => {
   const [searchParams] = useSearchParams();
@@ -16,6 +16,7 @@ const Auth = () => {
 
   const testAccounts = [
     { email: 'admin@marsia.com', password: 'admin', role: 'admin', name: 'Admin Test' },
+    { email: 'super@marsia.com', password: 'super', role: 'superadmin', name: 'Super Admin' },
     { email: 'jury@marsia.com', password: 'jury', role: 'jury', name: 'Jury Test' },
     { email: 'user@marsia.com', password: 'user', role: 'user', name: 'User Test' },
     { email: 'real@marsia.com', password: 'real', role: 'realisateur', name: 'Réal Test' },
@@ -29,7 +30,8 @@ const Auth = () => {
     
     if (testUser) {
       localStorage.setItem('user', JSON.stringify(testUser));
-      if (testUser.role === 'admin') navigate('/admin');
+      if (testUser.role === 'superadmin') navigate('/superadmin');
+      else if (testUser.role === 'admin') navigate('/admin');
       else if (testUser.role === 'jury') navigate('/jury');
       else navigate('/profile');
       return;
@@ -198,8 +200,8 @@ const Auth = () => {
             </div>
 
             <button className="w-full py-3 rounded-xl border border-white/10 flex items-center justify-center space-x-2 text-sm text-foreground hover:bg-white/5 transition-all">
-              <Github size={18} />
-              <span>GitHub</span>
+              <Chrome size={18} />
+              <span>Google</span>
             </button>
           </div>
         </div>

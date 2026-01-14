@@ -262,3 +262,36 @@ Fiche complète obligatoire :
 - Points à préciser avec client : barème détaillé du jury, règles littérature suppression, contrôle âge, durée modifiabilité des votes.
 
 **Document mis à jour d’après la version MaJ.CDH.md et validé par l’équipe marsAI.**
+
+permettre au jury de communiquer avec le realisateur
+
+si probleme envoyé un message au real si soucis sur la video 
+(Auto n8n via API youtube ? Et script de reponse de, soucis ici corrigez le
+donc possibilité de publier une nouvelle fois la video)
+
+50 nomination
+Prix a prendre en compte les différent style de prix
+page Loréa apres avec mise en avant d'une page de mise en avant des meilleure notes
+
+echelonnage de selction pour le vote 
+1 seul role jury a rendre dynamique
+tolerence de 2 min
+prendre les polices de la PLateforme
+page prix, mis en avant des le debut et associé un partnaire pour chaque prix(quoi, qui soutient)
+3 phase 
+1: BA des editions precedant 
+selection officille
+2:affichage selection officielle 
+3:Palmares mis en avant
+
+solution pour stockage de tous les films de facon ephemere
+
+critere artistique, narratif ( basé sur les critéres dans le cinema )
+
+Partage (com)
+tiktok
+insta
+
+attente des catégorie de nomination(CRUD)
+
+page de pres des différents jury av photo et bio

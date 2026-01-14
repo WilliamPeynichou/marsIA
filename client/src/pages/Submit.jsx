@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, Upload, Check } from 'lucide-react';
+import { ChevronDown, Upload, Check, FileText, Image, MessageSquare } from 'lucide-react';
 
 const Submit = () => {
   const { t } = useTranslation();
@@ -75,15 +75,39 @@ const Submit = () => {
               <input type="text" placeholder="Français, Anglais..." className="input-field" />
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest text-earth-brown/50 font-bold">Catégorie *</label>
-              <select className="input-field">
-                <option value="">Sélectionner une catégorie...</option>
-                <option value="fiction">Fiction</option>
-                <option value="documentary">Documentaire</option>
-                <option value="experimental">Expérimental</option>
-                <option value="animation">Animation</option>
-              </select>
+            <div className="space-y-3">
+              <label className="text-[10px] uppercase tracking-widest text-earth-brown/50 font-bold">Prix visés (Sélection multiple) *</label>
+              <div className="grid grid-cols-1 gap-2">
+                {[
+                  { id: 'grand-prix', label: 'Grand Prix marsIA' },
+                  { id: 'innovation', label: 'Prix de l\'Innovation' },
+                  { id: 'public', label: 'Prix du Public' },
+                  { id: 'court', label: 'Prix du Court-Métrage (< 2min)' }
+                ].map((prize) => (
+                  <label key={prize.id} className="flex items-center space-x-3 p-3 rounded-xl border border-earth-brown/10 bg-white/5 cursor-pointer hover:bg-accent-ia/5 transition-colors">
+                    <input type="checkbox" className="accent-accent-ia w-4 h-4" />
+                    <span className="text-sm font-bold text-earth-brown">{prize.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <label className="text-[10px] uppercase tracking-widest text-earth-brown/50 font-bold">Nature de la création IA *</label>
+              <div className="flex space-x-4">
+                <button 
+                  type="button"
+                  className="flex-1 py-3 rounded-xl text-[10px] uppercase font-bold bg-white/5 border border-white/10 text-neutral-grey hover:bg-accent-ia hover:text-white transition-all"
+                >
+                  100% IA
+                </button>
+                <button 
+                  type="button"
+                  className="flex-1 py-3 rounded-xl text-[10px] uppercase font-bold bg-white/5 border border-white/10 text-neutral-grey hover:bg-accent-ia hover:text-white transition-all"
+                >
+                  Hybride IA/Réel
+                </button>
+              </div>
             </div>
 
             <div className="space-y-3">
@@ -178,6 +202,31 @@ const Submit = () => {
               <div className="border-2 border-dashed border-earth-brown/10 rounded-2xl p-8 text-center hover:border-accent-ia/30 transition-colors cursor-pointer">
                 <Upload size={32} className="mx-auto text-earth-brown/30 mb-2" />
                 <p className="text-xs text-earth-brown/50">JPG, PNG, GIF (max 2Mo)</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-[10px] uppercase tracking-widest text-earth-brown/50 font-bold">Fichier SRT (S-T)</label>
+                <div className="border border-dashed border-earth-brown/10 rounded-xl p-4 text-center hover:border-accent-ia/30 transition-colors cursor-pointer flex flex-col items-center">
+                  <FileText size={20} className="text-earth-brown/30 mb-1" />
+                  <span className="text-[8px] uppercase font-bold text-neutral-grey">Uploader .srt</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] uppercase tracking-widest text-earth-brown/50 font-bold">Galerie Photos</label>
+                <div className="border border-dashed border-earth-brown/10 rounded-xl p-4 text-center hover:border-accent-ia/30 transition-colors cursor-pointer flex flex-col items-center">
+                  <Image size={20} className="text-earth-brown/30 mb-1" />
+                  <span className="text-[8px] uppercase font-bold text-neutral-grey">Uploader images</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] uppercase tracking-widest text-earth-brown/50 font-bold">Fichiers d'accompagnement</label>
+              <div className="border border-dashed border-earth-brown/10 rounded-xl p-4 text-center hover:border-accent-ia/30 transition-colors cursor-pointer flex items-center justify-center space-x-2">
+                <Upload size={16} className="text-earth-brown/30" />
+                <span className="text-[9px] uppercase font-bold text-neutral-grey">Dossier de presse, PDF, etc.</span>
               </div>
             </div>
 
