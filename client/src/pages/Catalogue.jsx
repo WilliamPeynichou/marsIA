@@ -1,197 +1,167 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Filter, ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { Filter, Play, ArrowRight, Calendar, MapPin, Tag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-// Mock data
-const mockFilms = Array.from({ length: 48 }, (_, i) => ({
+// Données enrichies pour correspondre au style Siena
+const mockFilms = Array.from({ length: 12 }, (_, i) => ({
   id: i + 1,
-  title: `Film ${i + 1}`,
+  title: [
+    "Neon Future", "Digital Nature", "Savoy", "Moon 12", 
+    "Binary Sunset", "AI Dreams", "Kafka Trial", "Project X"
+  ][i % 8],
   director: `Réalisateur ${i + 1}`,
-  country: ['France', 'USA', 'UK', 'Japan', 'Germany'][Math.floor(Math.random() * 5)],
+  year: "2026",
+  location: ['Marseille', 'Tel Aviv', 'Tokyo', 'Berlin', 'New York'][Math.floor(Math.random() * 5)],
   category: ['Fiction', 'Documentary', 'Experimental', 'Animation'][Math.floor(Math.random() * 4)],
-  aiTools: ['Midjourney', 'Runway', 'Sora', 'ChatGPT'][Math.floor(Math.random() * 4)],
-  poster: `https://picsum.photos/seed/${i + 1}/400/600`
+  poster: `https://picsum.photos/seed/${i + 10}/800/1200`,
+  description: "A film based on a poetic vision of the future, exploring the boundaries between human emotion and synthetic intelligence."
 }));
-
-const FILMS_PER_PAGE = 20;
 
 const Catalogue = () => {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
-  const [filters, setFilters] = useState({ category: '', country: '', aiTool: '', prize: '', type: '' });
-
-  const filteredFilms = mockFilms.filter(film => {
-    if (filters.category && film.category !== filters.category) return false;
-    if (filters.country && film.country !== filters.country) return false;
-    if (filters.aiTool && film.aiTools !== filters.aiTool) return false;
-    // Simuler d'autres filtres
-    if (filters.type && (filters.type === 'solo' ? index % 2 !== 0 : index % 2 === 0)) return false; 
-    return true;
-  });
-
-  const totalPages = Math.ceil(filteredFilms.length / FILMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * FILMS_PER_PAGE;
-  const displayedFilms = filteredFilms.slice(startIndex, startIndex + FILMS_PER_PAGE);
 
   return (
-    <div className="min-h-screen px-4 pt-6 pb-24">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+    <div className="min-h-screen bg-background pb-32">
+      {/* Header Minimaliste Style Siena */}
+      <header className="px-6 py-16 md:px-12 flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/5 mb-24">
         <div>
-          <h1 className="text-2xl font-serif italic text-earth-brown">Catalogue</h1>
-          <p className="text-[10px] uppercase tracking-widest text-earth-brown/50 mt-1">{filteredFilms.length} films</p>
+          <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-accent-ia mb-4 block">Selected Works</span>
+          <h1 className="text-6xl md:text-8xl font-display font-bold tracking-tighter leading-none">FILMS<span className="text-accent-ia">.</span></h1>
         </div>
-        <button 
-          onClick={() => setShowFilters(!showFilters)}
-          className={`p-3 rounded-xl transition-all ${showFilters ? 'bg-accent-ia text-white' : 'bg-earth-brown/5 text-earth-brown/60'}`}
-        >
-          <Filter size={18} />
-        </button>
-      </div>
-
-      {/* Filters Panel */}
-      {showFilters && (
-        <motion.div 
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          className="mb-6 p-4 bg-white/60 rounded-2xl space-y-4"
-        >
-          <div className="grid grid-cols-2 gap-3">
-            <select 
-              value={filters.category}
-              onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-              className="input-field text-[10px] py-2"
-            >
-              <option value="">Catégorie</option>
-              <option value="Fiction">Fiction</option>
-              <option value="Documentary">Documentaire</option>
-              <option value="Experimental">Expérimental</option>
-              <option value="Animation">Animation</option>
-            </select>
-            <select 
-              value={filters.country}
-              onChange={(e) => setFilters({ ...filters, country: e.target.value })}
-              className="input-field text-[10px] py-2"
-            >
-              <option value="">Pays</option>
-              <option value="France">France</option>
-              <option value="USA">USA</option>
-              <option value="UK">UK</option>
-              <option value="Japan">Japon</option>
-              <option value="Germany">Allemagne</option>
-            </select>
-            <select 
-              value={filters.aiTool}
-              onChange={(e) => setFilters({ ...filters, aiTool: e.target.value })}
-              className="input-field text-[10px] py-2"
-            >
-              <option value="">Outils IA</option>
-              <option value="Midjourney">Midjourney</option>
-              <option value="Runway">Runway</option>
-              <option value="Sora">Sora</option>
-              <option value="ChatGPT">ChatGPT</option>
-            </select>
-            <select 
-              value={filters.prize}
-              onChange={(e) => setFilters({ ...filters, prize: e.target.value })}
-              className="input-field text-[10px] py-2"
-            >
-              <option value="">Prix visé</option>
-              <option value="grand-prix">Grand Prix</option>
-              <option value="innovation">Prix Innovation</option>
-              <option value="narratif">Prix Narratif</option>
-            </select>
-            <select 
-              value={filters.type}
-              onChange={(e) => setFilters({ ...filters, type: e.target.value })}
-              className="input-field text-[10px] py-2"
-            >
-              <option value="">Participation</option>
-              <option value="solo">Solo</option>
-              <option value="group">Groupe</option>
-            </select>
-          </div>
+        <div className="flex flex-col items-start md:items-end mt-8 md:mt-0">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-neutral-grey font-bold mb-6">{mockFilms.length} ARCHIVES DISPONIBLES</p>
           <button 
-            onClick={() => setFilters({ category: '', country: '', aiTool: '', prize: '', type: '' })}
-            className="text-[10px] uppercase tracking-widest text-accent-ia font-bold"
+            onClick={() => setShowFilters(!showFilters)}
+            className="group flex items-center space-x-3 text-[10px] font-bold uppercase tracking-widest border border-white/10 px-6 py-3 rounded-full hover:bg-white hover:text-background transition-all duration-500 shadow-xl"
           >
-            Réinitialiser
+            <Filter size={12} className="group-hover:rotate-180 transition-transform duration-500" />
+            <span>Filtres</span>
           </button>
-        </motion.div>
-      )}
+        </div>
+      </header>
 
-      {/* Films Grid */}
-      <div className="grid grid-cols-2 gap-4">
-        {displayedFilms.map((film, index) => (
+      {/* Liste Verticale Immersive */}
+      <div className="space-y-32 md:space-y-64 px-6 md:px-12">
+        {mockFilms.map((film, index) => (
           <motion.div
             key={film.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-            className="group cursor-pointer"
-            onClick={() => navigate('/jury')}
+            initial={{ opacity: 0, y: 80 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-150px" }}
+            transition={{ duration: 1, ease: [0.19, 1, 0.22, 1] }}
+            className="group relative grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center"
           >
-            <div className="aspect-[2/3] rounded-2xl overflow-hidden relative bg-earth-brown/5 mb-3">
-              <img 
-                src={film.poster} 
-                alt={film.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                  <Play size={16} className="text-white ml-0.5" />
+            {/* Info Section (Left) */}
+            <div className="lg:col-span-5 order-2 lg:order-1 space-y-10">
+              <div className="space-y-6">
+                <div className="flex items-center space-x-4">
+                  <span className="w-8 h-[1px] bg-accent-ia" />
+                  <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-accent-ia">
+                    {film.category}
+                  </span>
+                </div>
+                
+                <h2 className="text-5xl md:text-7xl font-serif italic text-foreground leading-[0.9] tracking-tight">
+                  {film.title}
+                </h2>
+                
+                <p className="text-neutral-grey text-base md:text-lg leading-relaxed max-w-md font-serif italic opacity-80">
+                  Directed by <span className="text-foreground font-bold not-italic">{film.director}</span>. {film.description}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-12 py-10 border-y border-white/5">
+                <div className="space-y-2">
+                  <p className="text-[9px] uppercase tracking-[0.3em] text-neutral-grey font-bold flex items-center">
+                    <Calendar size={12} className="mr-2 opacity-50" /> Année
+                  </p>
+                  <p className="text-lg font-display font-bold tracking-tight">{film.year}</p>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-[9px] uppercase tracking-[0.3em] text-neutral-grey font-bold flex items-center">
+                    <MapPin size={12} className="mr-2 opacity-50" /> Lieu
+                  </p>
+                  <p className="text-lg font-display font-bold tracking-tight">{film.location}</p>
                 </div>
               </div>
-              <div className="absolute top-2 right-2 px-2 py-1 bg-white/80 backdrop-blur-sm rounded-full text-[8px] uppercase tracking-wider font-bold text-earth-brown">
-                {film.category}
+
+              <button 
+                onClick={() => navigate('/jury')}
+                className="flex items-center space-x-6 group/btn"
+              >
+                <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center group-hover/btn:bg-foreground group-hover/btn:border-foreground transition-all duration-700 shadow-2xl relative overflow-hidden">
+                  <Play size={20} className="text-foreground group-hover/btn:text-background relative z-10" />
+                  <motion.div 
+                    initial={false}
+                    whileHover={{ scale: 1.5 }}
+                    className="absolute inset-0 bg-white opacity-0 group-hover/btn:opacity-10 transition-opacity"
+                  />
+                </div>
+                <div className="flex flex-col items-start">
+                  <span className="text-[10px] uppercase tracking-[0.5em] font-bold group-hover/btn:translate-x-3 transition-all duration-700">
+                    EXPLORE
+                  </span>
+                  <span className="text-[8px] text-neutral-grey uppercase tracking-widest mt-1 opacity-0 group-hover/btn:opacity-100 transition-all duration-700">Visionner le film</span>
+                </div>
+              </button>
+            </div>
+
+            {/* Poster Section (Right) */}
+            <div 
+              className="lg:col-span-7 order-1 lg:order-2 relative aspect-[16/10] lg:aspect-[16/11] overflow-hidden rounded-[3rem] cursor-pointer shadow-2xl group/poster" 
+              onClick={() => navigate('/jury')}
+            >
+              <motion.img 
+                whileHover={{ scale: 1.08 }}
+                transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
+                src={film.poster} 
+                alt={film.title}
+                className="w-full h-full object-cover grayscale-[40%] group-hover/poster:grayscale-0 transition-all duration-1000"
+              />
+              
+              {/* Overlay Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-background/40 via-transparent to-transparent opacity-60 group-hover/poster:opacity-20 transition-all duration-1000" />
+              
+              {/* Badge "Admit One" style Siena */}
+              <motion.div 
+                animate={{ rotate: [12, 8, 12] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-10 right-10 w-24 h-24 rounded-full border border-white/20 backdrop-blur-xl flex items-center justify-center text-[10px] font-bold text-white uppercase tracking-tighter text-center leading-none shadow-2xl z-20"
+              >
+                <div className="flex flex-col items-center">
+                  <span className="opacity-40 mb-1 tracking-[0.2em]">Ticket</span>
+                  <span>Admit</span>
+                  <span>One</span>
+                  <span className="mt-1 font-display opacity-60 text-[8px]">№ {film.id.toString().padStart(3, '0')}</span>
+                </div>
+              </motion.div>
+
+              {/* Hover state content */}
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/poster:opacity-100 transition-all duration-700 bg-foreground/5 backdrop-blur-[2px]">
+                <div className="w-24 h-24 rounded-full border border-white/40 flex items-center justify-center">
+                  <Play size={32} className="text-white fill-white" />
+                </div>
               </div>
             </div>
-            <h3 className="text-sm font-bold text-earth-brown truncate">{film.title}</h3>
-            <p className="text-[10px] text-earth-brown/50">{film.director} • {film.country}</p>
           </motion.div>
         ))}
       </div>
 
-      {/* Pagination */}
-      <div className="flex justify-center items-center space-x-4 mt-8">
-        <button 
-          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-          disabled={currentPage === 1}
-          className="p-2 rounded-xl bg-earth-brown/5 text-earth-brown disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          <ChevronLeft size={20} />
-        </button>
-        <div className="flex items-center space-x-2">
-          {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-            const page = i + 1;
-            return (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
-                  currentPage === page ? 'bg-accent-ia text-white' : 'bg-earth-brown/5 text-earth-brown/60'
-                }`}
-              >
-                {page}
-              </button>
-            );
-          })}
-          {totalPages > 5 && <span className="text-earth-brown/30">...</span>}
+      {/* Footer / End Scroll Style */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="mt-64 text-center px-6"
+      >
+        <div className="w-[1px] h-32 bg-gradient-to-b from-accent-ia via-accent-ia/20 to-transparent mx-auto mb-12" />
+        <div className="space-y-4">
+          <p className="text-[10px] uppercase tracking-[0.6em] font-bold text-accent-ia">FIN DE LA SÉLECTION</p>
+          <h3 className="text-3xl font-serif italic text-foreground opacity-40">Plus de chefs-d'œuvre à venir.</h3>
         </div>
-        <button 
-          onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-          disabled={currentPage === totalPages}
-          className="p-2 rounded-xl bg-earth-brown/5 text-earth-brown disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          <ChevronRight size={20} />
-        </button>
-      </div>
-      <p className="text-center text-[10px] text-earth-brown/40 mt-2">
-        Page {currentPage} sur {totalPages}
-      </p>
+      </motion.div>
     </div>
   );
 };

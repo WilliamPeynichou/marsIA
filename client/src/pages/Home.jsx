@@ -106,39 +106,45 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 3 Phases Section */}
+      {/* Prizes Preview Section */}
       <section className="py-24 px-6 bg-white/5 border-y border-white/5">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <motion.span 
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 0.6 }}
-              className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent-ia"
+              className="text-[10px] uppercase tracking-[0.3em] font-bold text-cta-gold"
             >
-              Calendrier du Festival
+              Les Récompenses
             </motion.span>
-            <h2 className="text-4xl font-display font-bold text-foreground mt-2">Les 3 Temps Forts</h2>
+            <h2 className="text-4xl font-display font-bold text-foreground mt-2">Prix Décernés</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               { 
-                phase: "Phase 1", 
-                title: "BA & Teasing", 
-                desc: "Découverte des archives et bandes-annonces des éditions précédentes.", 
-                active: true 
+                title: "Grand Prix marsIA", 
+                partner: "La Plateforme", 
+                desc: "La distinction suprême récompensant l'excellence artistique et technique.",
+                color: "border-cta-gold/30 bg-cta-gold/5" 
               },
               { 
-                phase: "Phase 2", 
-                title: "Sélection Officielle", 
-                desc: "Révélation des films en compétition et ouverture des votes du public.", 
-                active: false 
+                title: "Prix de l'Innovation", 
+                partner: "AI Creative Lab", 
+                desc: "Récompense l'utilisation la plus créative des nouveaux outils IA.",
+                color: "border-accent-ia/30 bg-accent-ia/5" 
               },
               { 
-                phase: "Phase 3", 
-                title: "Le Palmarès", 
-                desc: "Cérémonie de clôture et mise en avant des œuvres lauréates.", 
-                active: false 
+                title: "Prix du Public", 
+                partner: "Ville de Marseille", 
+                desc: "Le film ayant reçu le plus de votes de la part des visiteurs.",
+                color: "border-marseille-green/30 bg-marseille-green/5" 
+              },
+              { 
+                title: "Prix du Court-Métrage", 
+                partner: "Mobile Film Festival", 
+                desc: "Excellence dans le format ultra-court de moins de 2 minutes.",
+                color: "border-marseille-ocre/30 bg-marseille-ocre/5" 
               }
             ].map((p, i) => (
               <motion.div
@@ -146,16 +152,27 @@ const Home = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className={`relative p-8 rounded-[2.5rem] border ${p.active ? 'border-accent-ia bg-accent-ia/5' : 'border-white/10 bg-white/5 opacity-50'}`}
+                className={`p-8 rounded-[2.5rem] border ${p.color} group hover:scale-[1.02] transition-all duration-500`}
               >
-                {p.active && (
-                  <span className="absolute -top-3 left-8 px-4 py-1 bg-accent-ia text-white text-[8px] font-bold uppercase tracking-widest rounded-full">En cours</span>
-                )}
-                <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-grey mb-4 block">{p.phase}</span>
-                <h3 className="text-xl font-display font-bold text-foreground mb-4">{p.title}</h3>
-                <p className="text-sm text-neutral-grey leading-relaxed">{p.desc}</p>
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="text-xl font-display font-bold text-foreground">{p.title}</h3>
+                  <span className="text-[8px] font-bold uppercase tracking-widest px-3 py-1 bg-white/10 rounded-full border border-white/10">Édition 2026</span>
+                </div>
+                <p className="text-sm text-neutral-grey leading-relaxed mb-6">{p.desc}</p>
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] uppercase font-bold text-neutral-grey/60">Soutenu par</span>
+                  <span className="text-[10px] uppercase font-bold text-foreground">{p.partner}</span>
+                </div>
               </motion.div>
             ))}
+          </div>
+          
+          <div className="text-center mt-12">
+            <Link to="/prizes">
+              <button className="text-[10px] uppercase tracking-widest font-bold text-accent-ia border-b border-accent-ia/30 pb-1 hover:border-accent-ia transition-all">
+                Voir tous les détails des prix
+              </button>
+            </Link>
           </div>
         </div>
       </section>
