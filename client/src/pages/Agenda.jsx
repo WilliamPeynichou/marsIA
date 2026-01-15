@@ -90,7 +90,7 @@ const Agenda = () => {
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Hero Header */}
-      <div className="relative py-24 px-6 md:px-12 bg-black text-white overflow-hidden mb-12">
+      <div className="relative py-16 md:py-24 px-6 md:px-12 bg-black text-white overflow-hidden mb-8 md:mb-12">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-40" />
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <motion.span 
@@ -104,7 +104,7 @@ const Agenda = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-5xl md:text-7xl font-serif italic mb-6"
+            className="text-4xl md:text-7xl font-serif italic mb-6"
           >
             Agenda du Festival
           </motion.h1>
@@ -114,7 +114,7 @@ const Agenda = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
               onClick={() => setShowModal(true)}
-              className="mt-8 flex items-center space-x-3 bg-accent-ia text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest hover:bg-accent-ia/90 transition-all mx-auto shadow-lg shadow-accent-ia/20"
+              className="mt-6 md:mt-8 flex items-center space-x-3 bg-accent-ia text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold uppercase tracking-widest hover:bg-accent-ia/90 transition-all mx-auto shadow-lg shadow-accent-ia/20 text-xs md:text-sm"
             >
               <Plus size={18} />
               <span>Ajouter un événement</span>
@@ -122,6 +122,20 @@ const Agenda = () => {
           )}
         </div>
       </div>
+
+      {/* Bouton Flottant Mobile pour Admin */}
+      {isAdmin && (
+        <motion.button
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setShowModal(true)}
+          className="md:hidden fixed bottom-24 right-6 z-[110] w-16 h-16 bg-accent-ia text-white rounded-full flex items-center justify-center shadow-2xl shadow-accent-ia/40 border-2 border-white/20"
+        >
+          <Plus size={32} />
+        </motion.button>
+      )}
 
       {/* Events List */}
       <div className="max-w-5xl mx-auto px-6">
@@ -227,98 +241,125 @@ const Agenda = () => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative bg-white rounded-[2rem] p-8 w-full max-w-lg shadow-2xl overflow-hidden"
+              className="relative bg-white rounded-[2.5rem] p-6 md:p-10 w-full max-w-xl shadow-2xl overflow-y-auto max-h-[90vh] scrollbar-hide"
             >
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-serif italic text-foreground">Nouvel Événement</h2>
+              <div className="flex justify-between items-center mb-10">
+                <div>
+                  <h2 className="text-3xl font-serif italic text-foreground leading-tight">Nouvel Événement</h2>
+                  <p className="text-xs text-neutral-grey mt-1">Planifiez une nouvelle session pour le festival</p>
+                </div>
                 <button 
                   onClick={() => setShowModal(false)}
-                  className="p-2 hover:bg-neutral-100 rounded-full transition-colors"
+                  className="p-3 hover:bg-neutral-100 rounded-2xl transition-all group"
                 >
-                  <X size={24} className="text-neutral-grey" />
+                  <X size={24} className="text-neutral-grey group-hover:rotate-90 transition-transform duration-300" />
                 </button>
               </div>
 
-              <form onSubmit={handleAddEvent} className="space-y-6">
-                <div>
-                  <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-grey block mb-2">Titre de l'événement</label>
+              <form onSubmit={handleAddEvent} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="md:col-span-2">
+                  <label className="input-label flex items-center gap-2 mb-2">
+                    <Calendar size={12} className="text-accent-ia" />
+                    Titre de l'événement
+                  </label>
                   <input 
                     type="text" 
                     required
                     value={newEvent.title}
                     onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
                     className="input-field"
-                    placeholder="Ex: Projection Dune"
+                    placeholder="Ex: Projection Grand Public : Dune Part II"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-grey block mb-2">Date</label>
-                    <input 
-                      type="date" 
-                      required
-                      value={newEvent.date}
-                      onChange={(e) => setNewEvent({...newEvent, date: e.target.value})}
-                      className="input-field"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-grey block mb-2">Heure</label>
-                    <input 
-                      type="time" 
-                      required
-                      value={newEvent.time}
-                      onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
-                      className="input-field"
-                    />
-                  </div>
+                <div>
+                  <label className="input-label flex items-center gap-2 mb-2">
+                    <Calendar size={12} className="text-accent-ia" />
+                    Date
+                  </label>
+                  <input 
+                    type="date" 
+                    required
+                    value={newEvent.date}
+                    onChange={(e) => setNewEvent({...newEvent, date: e.target.value})}
+                    className="input-field"
+                  />
+                </div>
+                <div>
+                  <label className="input-label flex items-center gap-2 mb-2">
+                    <Clock size={12} className="text-accent-ia" />
+                    Heure
+                  </label>
+                  <input 
+                    type="time" 
+                    required
+                    value={newEvent.time}
+                    onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
+                    className="input-field"
+                  />
                 </div>
 
-                <div>
-                  <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-grey block mb-2">Lieu (Salle/Zone)</label>
+                <div className="md:col-span-2">
+                  <label className="input-label flex items-center gap-2 mb-2">
+                    <MapPin size={12} className="text-accent-ia" />
+                    Lieu (Salle/Zone)
+                  </label>
                   <input 
                     type="text" 
                     required
                     value={newEvent.location}
                     onChange={(e) => setNewEvent({...newEvent, location: e.target.value})}
                     className="input-field"
-                    placeholder="Ex: Grande Salle"
+                    placeholder="Ex: Grande Salle - Palais des Festivals"
                   />
                 </div>
 
-                <div>
-                  <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-grey block mb-2">Catégorie</label>
-                  <select 
-                    value={newEvent.category}
-                    onChange={(e) => setNewEvent({...newEvent, category: e.target.value})}
-                    className="input-field"
-                  >
-                    <option value="Projection">Projection</option>
-                    <option value="Conférence">Conférence</option>
-                    <option value="Cérémonie">Cérémonie</option>
-                    <option value="Atelier">Atelier</option>
-                    <option value="Networking">Networking</option>
-                  </select>
+                <div className="md:col-span-2">
+                  <label className="input-label flex items-center gap-2 mb-2">
+                    <Ticket size={12} className="text-accent-ia" />
+                    Catégorie
+                  </label>
+                  <div className="relative">
+                    <select 
+                      value={newEvent.category}
+                      onChange={(e) => setNewEvent({...newEvent, category: e.target.value})}
+                      className="input-field appearance-none"
+                    >
+                      <option value="Projection">🎥 Projection</option>
+                      <option value="Conférence">🎤 Conférence</option>
+                      <option value="Cérémonie">✨ Cérémonie</option>
+                      <option value="Atelier">🛠️ Atelier</option>
+                      <option value="Networking">🤝 Networking</option>
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
+                      <Plus size={16} className="rotate-45" />
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="text-[10px] uppercase tracking-widest font-bold text-neutral-grey block mb-2">Description</label>
+                <div className="md:col-span-2">
+                  <label className="input-label flex items-center gap-2 mb-2">
+                    Description
+                  </label>
                   <textarea 
-                    rows={3}
+                    rows={4}
                     value={newEvent.description}
                     onChange={(e) => setNewEvent({...newEvent, description: e.target.value})}
-                    className="input-field resize-none"
-                    placeholder="Brève description de l'événement..."
+                    className="input-field resize-none py-4"
+                    placeholder="Décrivez brièvement le déroulement, les intervenants ou les prérequis..."
                   />
+                  <p className="input-helper mt-2">Maximum 500 caractères recommandés.</p>
                 </div>
 
-                <button 
-                  type="submit"
-                  className="w-full bg-accent-ia text-white py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-accent-ia/90 transition-all shadow-lg shadow-accent-ia/20 mt-4"
-                >
-                  Ajouter au programme
-                </button>
+                <div className="md:col-span-2 pt-4">
+                  <button 
+                    type="submit"
+                    className="w-full bg-accent-ia text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] hover:bg-accent-ia/90 transition-all shadow-xl shadow-accent-ia/20 flex items-center justify-center gap-3 group"
+                  >
+                    <Plus size={20} className="group-hover:rotate-90 transition-transform" />
+                    <span>Ajouter au programme</span>
+                  </button>
+                </div>
               </form>
             </motion.div>
           </div>
