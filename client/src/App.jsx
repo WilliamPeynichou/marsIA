@@ -17,6 +17,7 @@ import Winners from './pages/Winners';
 import OffCompetition from './pages/OffCompetition';
 import Chatbot from './pages/Chatbot';
 import FilmDetail from './pages/FilmDetail';
+import Agenda from './pages/Agenda';
 import BottomNav from './components/BottomNav';
 import { useTranslation } from 'react-i18next';
 import { Globe, User } from 'lucide-react';
@@ -53,6 +54,7 @@ const AppContent = () => {
   const location = useLocation();
   const { i18n } = useTranslation();
   const hideBottomNav = location.pathname === '/jury';
+  const hideBottomPadding = location.pathname === '/catalogue' || location.pathname.startsWith('/film/');
 
   const toggleLanguage = () => {
     const nextLang = i18n.language === 'fr' ? 'en' : 'fr';
@@ -60,7 +62,7 @@ const AppContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground pb-[70px] md:pb-24">
+    <div className={`min-h-screen bg-background text-foreground ${hideBottomPadding ? '' : 'pb-[70px] md:pb-24'}`}>
       {/* Boutons d'action fixes (Top Right) */}
       <div className="fixed top-6 right-6 z-[120] flex items-center space-x-3">
         <button 
@@ -96,6 +98,7 @@ const AppContent = () => {
         <Route path="/winners" element={<Winners />} />
         <Route path="/off-competition" element={<OffCompetition />} />
         <Route path="/chatbot" element={<Chatbot />} />
+        <Route path="/agenda" element={<Agenda />} />
         <Route path="/film/:id" element={<FilmDetail />} />
         <Route path="/superadmin" element={<SuperAdmin />} />
         <Route path="/staff" element={<StaffPanel />} />

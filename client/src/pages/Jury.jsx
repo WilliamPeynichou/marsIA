@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom';
 
 // Mock films data
 const mockJuryFilms = [
-  { id: 1, title: "Neon Future", director: "Alice Martin", country: "France", aiTools: "Runway, Midjourney", color: "from-blue-400 to-indigo-500", url: "https://player.vimeo.com/external/370331493.sd.mp4?s=7b2351d1ee6479994c6a967c11714872&profile_id=139&oauth2_token_id=57447761" },
-  { id: 2, title: "Digital Dreams", director: "John Smith", country: "USA", aiTools: "Sora, ChatGPT", color: "from-blue-400 to-cyan-500", url: "https://player.vimeo.com/external/370331493.sd.mp4?s=7b2351d1ee6479994c6a967c11714872&profile_id=139&oauth2_token_id=57447761" },
-  { id: 3, title: "Marseille 2050", director: "Marie Dupont", country: "France", aiTools: "Midjourney, Kling", color: "from-green-400 to-emerald-500", url: "https://player.vimeo.com/external/370331493.sd.mp4?s=7b2351d1ee6479994c6a967c11714872&profile_id=139&oauth2_token_id=57447761" },
-  { id: 4, title: "AI Symphony", director: "Kenji Tanaka", country: "Japan", aiTools: "Suno, Runway", color: "from-purple-400 to-violet-500", url: "https://player.vimeo.com/external/370331493.sd.mp4?s=7b2351d1ee6479994c6a967c11714872&profile_id=139&oauth2_token_id=57447761" },
-  { id: 5, title: "Tomorrow's Garden", director: "Elena Rossi", country: "Italy", aiTools: "Stable Diffusion", color: "from-rose-400 to-pink-500", url: "https://player.vimeo.com/external/370331493.sd.mp4?s=7b2351d1ee6479994c6a967c11714872&profile_id=139&oauth2_token_id=57447761" },
+  { id: 1, title: "Neon Future", director: "Alice Martin", country: "France", aiTools: "Runway, Midjourney", color: "from-blue-400 to-indigo-500", url: "/assets/vids/Enregistrement de l’écran 2026-01-14 à 13.39.22.mov" },
+  { id: 2, title: "Digital Dreams", director: "John Smith", country: "USA", aiTools: "Sora, ChatGPT", color: "from-blue-400 to-cyan-500", url: "/assets/vids/Enregistrement de l’écran 2026-01-14 à 16.45.42.mov" },
+  { id: 3, title: "Marseille 2050", director: "Marie Dupont", country: "France", aiTools: "Midjourney, Kling", color: "from-green-400 to-emerald-500", url: "/assets/vids/Enregistrement de l’écran 2026-01-14 à 16.48.13.mov" },
+  { id: 4, title: "AI Symphony", director: "Kenji Tanaka", country: "Japan", aiTools: "Suno, Runway", color: "from-purple-400 to-violet-500", url: "/assets/vids/Enregistrement de l’écran 2026-01-14 à 16.51.13.mov" },
+  { id: 5, title: "Tomorrow's Garden", director: "Elena Rossi", country: "Italy", aiTools: "Stable Diffusion", color: "from-rose-400 to-pink-500", url: "/assets/vids/Enregistrement de l’écran 2026-01-14 à 13.39.22.mov" },
 ];
 
 const Jury = () => {

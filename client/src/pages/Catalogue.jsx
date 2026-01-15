@@ -63,21 +63,21 @@ const FilmItem = ({ film, index }) => {
   return (
     <div 
       ref={containerRef}
-      className="relative w-full h-screen flex items-center justify-center snap-center"
+      className="relative w-full h-screen flex items-center justify-center snap-center px-4 md:px-0"
     >
-      {/* Main Poster Container (80% Width/Height) */}
+      {/* Main Poster Container */}
       <motion.div 
         style={{ scale, opacity }}
-        className="relative w-[85vw] h-[80vh] group overflow-hidden rounded-sm shadow-[0_0_100px_rgba(0,0,0,0.8)]"
+        className="relative w-full md:w-[85vw] h-[85vh] md:h-[80vh] group overflow-hidden rounded-2xl md:rounded-sm shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col md:block bg-black"
       >
         <img 
           src={film.poster} 
           alt={film.title}
-          className="w-full h-full object-cover transition-all duration-1000 ease-out"
+          className="w-full h-[60%] md:h-full object-cover transition-all duration-1000 ease-out"
         />
 
-        {/* Hover Info Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+        {/* Desktop Hover Info Overlay (Hidden on Mobile) */}
+        <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
           {/* Bottom Left Info */}
           <div className="absolute bottom-10 left-10 text-left max-w-lg pointer-events-auto">
             <motion.div
@@ -107,6 +107,27 @@ const FilmItem = ({ film, index }) => {
               <ArrowRight size={14} className="group-hover/btn:translate-x-2 transition-transform duration-500" />
             </button>
           </div>
+        </div>
+
+        {/* Mobile Info Section (Visible only on Mobile) */}
+        <div className="block md:hidden p-6 bg-black flex-1 flex flex-col justify-between">
+          <div>
+            <span className="text-accent-ia text-[10px] font-bold tracking-[0.4em] uppercase mb-2 block">{film.category}</span>
+            <h2 className="text-3xl font-serif italic text-white mb-3 leading-none">{film.title}</h2>
+            <div className="flex flex-wrap items-center gap-3 text-[10px] text-white/60 font-bold tracking-widest uppercase mb-4">
+              <span>{film.director}</span>
+              <span className="w-1 h-1 bg-white/30 rounded-full" />
+              <span>{film.year}</span>
+            </div>
+          </div>
+          
+          <button 
+            onClick={() => navigate(`/film/${film.id}`)}
+            className="w-full flex items-center justify-between bg-white/10 border border-white/10 px-6 py-4 rounded-xl active:bg-white active:text-black transition-colors"
+          >
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Discover</span>
+            <ArrowRight size={14} />
+          </button>
         </div>
 
         {/* Film Grain Effect Overlay */}
@@ -207,8 +228,8 @@ const Catalogue = () => {
           animate={{ opacity: 1, y: 0 }}
           className="pointer-events-auto"
         >
-          <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-accent-ia mb-2 block">MARS IA ARCHIVES</span>
-          <h1 className="text-4xl font-display font-bold tracking-tighter">FILM REEL<span className="text-accent-ia">.</span></h1>
+          <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-accent-ia mb-2 block">MARS IA</span>
+          <h1 className="text-4xl font-display font-bold tracking-tighter">Selection Officielle<span className="text-accent-ia">.</span></h1>
         </motion.div>
         
         <div className="pointer-events-auto flex flex-col items-end">
