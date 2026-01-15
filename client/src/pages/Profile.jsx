@@ -54,20 +54,11 @@ const Profile = () => {
           <p className="text-[10px] uppercase tracking-widest text-earth-brown/50 mt-1">{user.role}</p>
         </div>
         <div className="flex space-x-2">
-          <Link to="/submit">
-            <button className="flex items-center space-x-2 bg-accent-ia text-white px-4 py-2 rounded-xl text-[10px] font-bold uppercase hover:bg-accent-ia/90 transition-all">
-              <Plus size={14} />
-              <span>Nouveau film</span>
-            </button>
-          </Link>
           <button 
             onClick={toggleLanguage}
             className="p-2 rounded-xl bg-earth-brown/5 text-earth-brown/60"
           >
-            <Globe size={18} />
-          </button>
-          <button className="p-2 rounded-xl bg-earth-brown/5 text-earth-brown/60">
-            <Settings size={18} />
+
           </button>
         </div>
       </div>
@@ -146,10 +137,12 @@ const Profile = () => {
                   <Film size={20} className="text-earth-brown/40" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-earth-brown truncate">{film.title}</h3>
+                  <div className="flex items-center gap-3">
+                    <h3 className="font-bold text-earth-brown truncate">{film.title}</h3>
+                    {getStatusBadge(film.status)}
+                  </div>
                   <p className="text-[10px] text-earth-brown/40">{film.date}</p>
                 </div>
-                {getStatusBadge(film.status)}
               </motion.div>
             ))}
           </motion.div>
