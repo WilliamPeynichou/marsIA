@@ -222,25 +222,31 @@ const Catalogue = () => {
       `}} />
 
       {/* Header Style Pelicule */}
-      <header className="fixed top-0 left-0 right-0 z-50 p-10 flex justify-between items-start pointer-events-none">
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="pointer-events-auto"
-        >
-          <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-accent-ia mb-2 block">marsIA</span>
-          <h1 className="text-2xl md:text-4xl font-display font-bold tracking-tighter">Selection Officielle<span className="text-accent-ia">.</span></h1>
-        </motion.div>
-        
-        <div className="pointer-events-auto flex flex-col items-end">
+      <header className="fixed top-0 left-0 right-0 z-50 p-10 pointer-events-none">
+        <div className="flex justify-between items-start">
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="pointer-events-auto"
+          >
+            <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-accent-ia mb-2 block">marsIA</span>
+            <h1 className="text-2xl md:text-4xl font-display font-bold tracking-tighter">Selection Officielle<span className="text-accent-ia">.</span></h1>
+          </motion.div>
+          
+          <div className="pointer-events-auto flex flex-col items-end">
+            <div className="w-12 h-[1px] bg-white/20" />
+          </div>
+        </div>
+
+        {/* Bouton centré */}
+        <div className="flex justify-center mt-8">
           <Link 
             to="/catalogue/list"
-            className="group flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full hover:bg-white/10 transition-all mb-4"
+            className="pointer-events-auto group flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full hover:bg-white/10 transition-all"
           >
             <LayoutGrid size={14} className="text-accent-ia" />
             <span className="text-[9px] uppercase tracking-widest font-bold opacity-40 group-hover:opacity-100 transition-opacity">Vue indexée</span>
           </Link>
-          <div className="w-12 h-[1px] bg-white/20" />
         </div>
       </header>
 
