@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { MapPin, Navigation, Calendar } from 'lucide-react';
+import { MapPin, Navigation, Calendar, Tag, User, Play, ArrowRight } from 'lucide-react';
 import Countdown from '../components/Countdown';
 
 const Home = () => {
@@ -28,7 +28,7 @@ const Home = () => {
           transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
           className="relative z-20 flex flex-col items-center"
         >
-          <div className="space-y-6 text-center mb-16">
+          <div className="space-y-6 text-center mb-10">
             <motion.span 
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.6 }}
@@ -65,7 +65,7 @@ const Home = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 1 }}
-            className="mt-16 flex flex-col items-center space-y-6"
+            className="mt-6 flex flex-col items-center space-y-4"
           >
             <Link to="/auth?mode=register">
               <button className="btn-primary shadow-lg shadow-cta-gold/20">
@@ -75,17 +75,19 @@ const Home = () => {
             <motion.div 
               animate={{ y: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-              className="w-[1px] h-12 bg-gradient-to-b from-accent-ia/40 to-transparent"
+              className="w-[1px] h-8 bg-gradient-to-b from-accent-ia/40 to-transparent"
             />
           </motion.div>
         </motion.div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 px-6 bg-gradient-to-b from-background to-accent-ia/5">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-serif italic text-foreground text-center mb-12">Objectifs du Festival</h2>
-          <div className="grid grid-cols-3 gap-4">
+      <section className="py-8 md:py-12 px-4 sm:px-6 bg-gradient-to-b from-background to-accent-ia/5">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-[clamp(1.5rem,4vw,2rem)] font-serif italic text-foreground text-center mb-8 md:mb-12">
+            Objectifs du Festival
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-8">
             {[
               { value: "120+", label: "Pays" },
               { value: "600+", label: "Films" },
@@ -95,11 +97,16 @@ const Home = () => {
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="glass text-center p-6 rounded-2xl"
+                className="glass text-center p-6 md:p-10 rounded-[2rem] border border-earth-brown/5 shadow-sm"
               >
-                <span className="text-3xl md:text-4xl font-display font-bold text-[#5F7A4A]">{stat.value}</span>
-                <p className="text-[10px] uppercase tracking-widest text-neutral-grey mt-2 font-bold">{stat.label}</p>
+                <span className="text-[clamp(2rem,6vw,3.5rem)] font-display font-black text-[#5F7A4A] leading-none block">
+                  {stat.value}
+                </span>
+                <p className="text-[clamp(0.6rem,1.5vw,0.75rem)] uppercase tracking-[0.2em] text-neutral-grey mt-3 md:mt-4 font-black">
+                  {stat.label}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -187,26 +194,67 @@ const Home = () => {
           </p>
           <div className="flex justify-center space-x-4 pt-4">
             <Link to="/catalogue">
-              <button className="btn-secondary">
+              <button className="px-8 py-4 rounded-2xl bg-black text-cta-gold font-bold uppercase text-[10px] tracking-[0.2em] hover:bg-neutral-900 transition-all shadow-xl shadow-black/20">
                 Voir les films
               </button>
             </Link>
             <Link to="/auth?mode=register">
-              <button className="btn-primary">
+              <button className="btn-primary px-8">
                 Participer
               </button>
             </Link>
           </div>
           
-          <div className="flex justify-center space-x-8 pt-12 border-t border-white/5">
-            <Link to="/prizes" className="group">
-              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-neutral-grey group-hover:text-cta-gold transition-colors">Découvrir les Prix</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 pt-12 md:pt-20 border-t border-earth-brown/10">
+            <Link to="/prizes" className="group w-full">
+              <div className="p-6 md:p-8 rounded-[2.5rem] bg-white border border-earth-brown/10 hover:border-cta-gold/50 hover:bg-cta-gold/5 transition-all duration-300 flex flex-col items-center text-center space-y-4 shadow-[0_4px_20px_rgba(120,53,15,0.05)] hover:shadow-2xl hover:shadow-cta-gold/10 active:scale-95 h-full">
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-[1.5rem] bg-cta-gold/10 flex items-center justify-center group-hover:bg-cta-gold group-hover:rotate-12 transition-all duration-500 shadow-sm">
+                  <Tag size={24} className="text-cta-gold group-hover:text-white transition-colors" />
+                </div>
+                <div>
+                  <p className="text-[clamp(0.7rem,2vw,0.85rem)] uppercase tracking-[0.25em] font-black text-earth-brown">Les Prix</p>
+                  <p className="text-[clamp(0.55rem,1.2vw,0.65rem)] text-neutral-grey mt-1.5 font-medium italic">Découvrir les récompenses</p>
+                </div>
+                <div className="pt-2 md:pt-4">
+                  <div className="w-10 h-10 rounded-full border border-earth-brown/10 flex items-center justify-center group-hover:border-cta-gold/30 transition-colors bg-background/50">
+                    <ArrowRight size={14} className="text-neutral-grey group-hover:text-cta-gold group-hover:translate-x-1 transition-all" />
+                  </div>
+                </div>
+              </div>
             </Link>
-            <Link to="/jury-team" className="group">
-              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-neutral-grey group-hover:text-accent-ia transition-colors">Le Jury</p>
+            
+            <Link to="/jury-team" className="group w-full">
+              <div className="p-6 md:p-8 rounded-[2.5rem] bg-white border border-earth-brown/10 hover:border-accent-ia/50 hover:bg-accent-ia/5 transition-all duration-300 flex flex-col items-center text-center space-y-4 shadow-[0_4px_20px_rgba(120,53,15,0.05)] hover:shadow-2xl hover:shadow-accent-ia/10 active:scale-95 h-full">
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-[1.5rem] bg-accent-ia/10 flex items-center justify-center group-hover:bg-accent-ia group-hover:-rotate-12 transition-all duration-500 shadow-sm">
+                  <User size={24} className="text-accent-ia group-hover:text-white transition-colors" />
+                </div>
+                <div>
+                  <p className="text-[clamp(0.7rem,2vw,0.85rem)] uppercase tracking-[0.25em] font-black text-earth-brown">Le Jury</p>
+                  <p className="text-[clamp(0.55rem,1.2vw,0.65rem)] text-neutral-grey mt-1.5 font-medium italic">Experts & Visionnaires</p>
+                </div>
+                <div className="pt-2 md:pt-4">
+                  <div className="w-10 h-10 rounded-full border border-earth-brown/10 flex items-center justify-center group-hover:border-accent-ia/30 transition-colors bg-background/50">
+                    <ArrowRight size={14} className="text-neutral-grey group-hover:text-accent-ia group-hover:translate-x-1 transition-all" />
+                  </div>
+                </div>
+              </div>
             </Link>
-            <Link to="/winners" className="group">
-              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-neutral-grey group-hover:text-marseille-green transition-colors">Palmarès</p>
+
+            <Link to="/winners" className="group w-full">
+              <div className="p-6 md:p-8 rounded-[2.5rem] bg-white border border-earth-brown/10 hover:border-marseille-green/50 hover:bg-marseille-green/5 transition-all duration-300 flex flex-col items-center text-center space-y-4 shadow-[0_4px_20px_rgba(120,53,15,0.05)] hover:shadow-2xl hover:shadow-marseille-green/10 active:scale-95 h-full">
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-[1.5rem] bg-marseille-green/10 flex items-center justify-center group-hover:bg-marseille-green group-hover:rotate-12 transition-all duration-500 shadow-sm">
+                  <Play size={24} className="text-marseille-green group-hover:text-white transition-colors" />
+                </div>
+                <div>
+                  <p className="text-[clamp(0.7rem,2vw,0.85rem)] uppercase tracking-[0.25em] font-black text-earth-brown">Palmarès</p>
+                  <p className="text-[clamp(0.55rem,1.2vw,0.65rem)] text-neutral-grey mt-1.5 font-medium italic">Films Lauréats</p>
+                </div>
+                <div className="pt-2 md:pt-4">
+                  <div className="w-10 h-10 rounded-full border border-earth-brown/10 flex items-center justify-center group-hover:border-marseille-green/30 transition-colors bg-background/50">
+                    <ArrowRight size={14} className="text-neutral-grey group-hover:text-marseille-green group-hover:translate-x-1 transition-all" />
+                  </div>
+                </div>
+              </div>
             </Link>
           </div>
         </div>

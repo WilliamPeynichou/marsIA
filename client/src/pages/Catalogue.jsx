@@ -12,7 +12,7 @@ const baseFilms = [
     year: "2026",
     location: "Arrakis / Marseille",
     category: "Sci-Fi",
-    poster: "/assets/maquette/horizontaledune.jpg",
+    poster: `${import.meta.env.BASE_URL}assetMaquette/horizontaledune.jpg`,
     description: "Une exploration contemplative des paysages désertiques à travers le prisme de l'intelligence artificielle.",
     duration: "12:45",
     tools: "Runway Gen-3, Midjourney v6"
@@ -24,7 +24,7 @@ const baseFilms = [
     year: "2026",
     location: "Albuquerque / Berlin",
     category: "Dramédie",
-    poster: "/assets/maquette/littlemisssunshine.jpg",
+    poster: `${import.meta.env.BASE_URL}assetMaquette/littlemisssunshine.jpg`,
     description: "Le voyage émotionnel d'une famille recomposée dans un monde où les souvenirs sont augmentés par l'IA.",
     duration: "08:20",
     tools: "Sora, Luma Dream Machine"
@@ -36,7 +36,7 @@ const baseFilms = [
     year: "2026",
     location: "Cannes / Tokyo",
     category: "Horreur / Experimental",
-    poster: "/assets/maquette/subatnce-bandeau.jpg",
+    poster: `${import.meta.env.BASE_URL}assetMaquette/subatnce-bandeau.jpg`,
     description: "Une réflexion viscérale sur la beauté et la technologie, où la chair rencontre le code.",
     duration: "15:10",
     tools: "Kling AI, Udio"
@@ -68,12 +68,12 @@ const FilmItem = ({ film, index }) => {
       {/* Main Poster Container */}
       <motion.div 
         style={{ scale, opacity }}
-        className="relative w-full md:w-[85vw] h-[85vh] md:h-[80vh] group overflow-hidden rounded-2xl md:rounded-sm shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col md:block bg-black"
+        className="relative w-[90vw] md:w-[85vw] h-[70vh] md:h-[80vh] group overflow-hidden rounded-[2rem] md:rounded-sm shadow-[0_0_80px_rgba(0,0,0,0.6)] flex flex-col md:block bg-black border border-white/5"
       >
         <img 
           src={film.poster} 
           alt={film.title}
-          className="w-full h-[60%] md:h-full object-cover transition-all duration-1000 ease-out"
+          className="w-full h-[50%] md:h-full object-cover transition-all duration-1000 ease-out"
         />
 
         {/* Desktop Hover Info Overlay (Hidden on Mobile) */}
@@ -194,7 +194,7 @@ const Catalogue = () => {
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0 }}
-            className="fixed z-[999] pointer-events-none flex flex-col items-center justify-center w-20 h-20 rounded-full border border-white/30 bg-white/5 backdrop-blur-sm"
+            className="hidden md:flex fixed z-[999] pointer-events-none flex-col items-center justify-center w-20 h-20 rounded-full border border-white/30 bg-white/5 backdrop-blur-sm"
             style={{ 
               left: mousePos.x - 40, 
               top: mousePos.y - 40,
@@ -228,8 +228,8 @@ const Catalogue = () => {
           animate={{ opacity: 1, y: 0 }}
           className="pointer-events-auto"
         >
-          <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-accent-ia mb-2 block">MARS IA</span>
-          <h1 className="text-4xl font-display font-bold tracking-tighter">Selection Officielle<span className="text-accent-ia">.</span></h1>
+          <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-accent-ia mb-2 block">marsIA</span>
+          <h1 className="text-2xl md:text-4xl font-display font-bold tracking-tighter">Selection Officielle<span className="text-accent-ia">.</span></h1>
         </motion.div>
         
         <div className="pointer-events-auto flex flex-col items-end">
@@ -249,7 +249,7 @@ const Catalogue = () => {
       </main>
 
       {/* Vertical Indicator */}
-      <div className="fixed right-10 top-1/2 -translate-y-1/2 flex flex-col items-center space-y-4 text-white/10 z-20">
+      <div className="hidden md:flex fixed right-10 top-1/2 -translate-y-1/2 flex-col items-center space-y-4 text-white/10 z-20">
         <div className="w-[1px] h-32 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
       </div>
     </div>
