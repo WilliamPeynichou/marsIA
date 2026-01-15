@@ -111,7 +111,7 @@ const AppContent = () => {
 const App = () => {
   return (
     <ErrorBoundary>
-      <Router basename="/marsIA">
+      <Router>
         <AppContent />
       </Router>
     </ErrorBoundary>
