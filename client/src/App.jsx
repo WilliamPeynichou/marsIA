@@ -18,6 +18,7 @@ import OffCompetition from './pages/OffCompetition';
 import Chatbot from './pages/Chatbot';
 import FilmDetail from './pages/FilmDetail';
 import Agenda from './pages/Agenda';
+import CatalogueList from './pages/CatalogueList';
 import BottomNav from './components/BottomNav';
 import { useTranslation } from 'react-i18next';
 import { Globe, User } from 'lucide-react';
@@ -86,6 +87,7 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/catalogue" element={<Catalogue />} />
+        <Route path="/catalogue/list" element={<CatalogueList />} />
         <Route path="/submit" element={<Submit />} />
         <Route path="/jury" element={<Jury />} />
         <Route path="/jury/favoris" element={<JuryFavoris />} />

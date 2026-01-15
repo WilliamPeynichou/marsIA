@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Filter, Play, ArrowRight, Calendar, MapPin, Tag, ChevronDown } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Filter, Play, ArrowRight, Calendar, MapPin, Tag, ChevronDown, LayoutGrid } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
 
 // Données enrichies avec les images de la maquette
 const baseFilms = [
@@ -233,6 +233,13 @@ const Catalogue = () => {
         </motion.div>
         
         <div className="pointer-events-auto flex flex-col items-end">
+          <Link 
+            to="/catalogue/list"
+            className="group flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full hover:bg-white/10 transition-all mb-4"
+          >
+            <LayoutGrid size={14} className="text-accent-ia" />
+            <span className="text-[9px] uppercase tracking-widest font-bold opacity-40 group-hover:opacity-100 transition-opacity">Vue indexée</span>
+          </Link>
           <div className="w-12 h-[1px] bg-white/20" />
         </div>
       </header>
