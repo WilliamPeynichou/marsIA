@@ -237,18 +237,18 @@ const Catalogue = () => {
             <div className="w-12 h-[1px] bg-white/20" />
           </div>
         </div>
-
-        {/* Bouton centré */}
-        <div className="flex justify-center mt-8">
-          <Link 
-            to="/catalogue/list"
-            className="pointer-events-auto group flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full hover:bg-white/10 transition-all"
-          >
-            <LayoutGrid size={14} className="text-accent-ia" />
-            <span className="text-[9px] uppercase tracking-widest font-bold opacity-40 group-hover:opacity-100 transition-opacity">Vue indexée</span>
-          </Link>
-        </div>
       </header>
+
+      {/* Bouton Vue Indexée - Centré en haut */}
+      <div className="fixed top-10 left-0 right-0 z-50 flex justify-center pointer-events-none">
+        <Link 
+          to="/catalogue/list"
+          className="pointer-events-auto group flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 px-6 py-3 rounded-full hover:bg-white hover:text-black transition-all duration-500 shadow-2xl shadow-black/40 mt-2 md:mt-0"
+        >
+          <LayoutGrid size={14} className="text-accent-ia group-hover:text-black transition-colors" />
+          <span className="text-[9px] uppercase tracking-widest font-bold opacity-40 group-hover:opacity-100 transition-opacity">Vue indexée</span>
+        </Link>
+      </div>
 
       {/* Film Strip Container */}
       <main 
