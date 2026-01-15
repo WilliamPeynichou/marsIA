@@ -8,6 +8,7 @@ const Profile = () => {
   const { i18n } = useTranslation();
   const user = JSON.parse(localStorage.getItem('user') || '{"name": "Invité", "role": "user"}');
   const isJury = user.role === 'jury' || user.role === 'admin';
+  const isReal = user.role === 'realisateur' || user.role === 'admin' || user.role === 'superadmin';
   const [activeTab, setActiveTab] = useState('submissions');
   const [savedRatings, setSavedRatings] = useState([]);
   const [savedBookmarks, setSavedBookmarks] = useState([]);
@@ -54,6 +55,15 @@ const Profile = () => {
           <p className="text-[10px] uppercase tracking-widest text-earth-brown/50 mt-1">{user.role}</p>
         </div>
         <div className="flex space-x-2">
+          {isReal && (
+            <Link 
+              to="/submit"
+              className="p-2 px-4 rounded-xl bg-accent-ia text-white flex items-center space-x-2 shadow-lg shadow-accent-ia/20 hover:scale-105 transition-transform"
+            >
+              <Plus size={16} />
+              <span className="text-[10px] font-bold uppercase tracking-widest hidden sm:block">Nouveau Film</span>
+            </Link>
+          )}
           <button 
             onClick={toggleLanguage}
             className="p-2 rounded-xl bg-earth-brown/5 text-earth-brown/60"
@@ -125,6 +135,18 @@ const Profile = () => {
             exit={{ opacity: 0, y: -10 }}
             className="space-y-3"
           >
+            {isReal && (
+              <Link 
+                to="/submit"
+                className="flex items-center justify-center space-x-3 w-full py-6 rounded-2xl border-2 border-dashed border-accent-ia/30 text-accent-ia hover:bg-accent-ia/5 hover:border-accent-ia transition-all group mb-6"
+              >
+                <div className="w-10 h-10 rounded-full bg-accent-ia/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Plus size={20} />
+                </div>
+                <span className="text-xs font-bold uppercase tracking-[0.2em]">Soumettre un nouveau film</span>
+              </Link>
+            )}
+            
             {submissions.map((film, index) => (
               <motion.div
                 key={film.id}
